@@ -1,9 +1,26 @@
 <!doctype html>
 
 <?php
+function log_out()
+{
+    if (isset($_SESSION["username"])) {
+        session_destroy();
+        session_start();
+    }
+}
+
+
 session_start();
-$auth = $_SESSION["auth"];
-$username = $_SESSION["username"];
+
+if (isset($_GET["logout"]))
+    log_out();
+
+$perm = 0;
+if (isset($_SESSION["permissions"]))
+    $perm = $_SESSION["permissions"];
+$auth = isset($_SESSION["username"]);
+if ($auth)
+    $username = $_SESSION["username"];
 ?>
 <html>
     <head>
@@ -19,7 +36,7 @@ $username = $_SESSION["username"];
             <?php
                 if ($auth) {
                     echo $username;
-                    echo '<a href="logout.php">odhlásit</a>';
+                    echo '<a href="index.php?logout=1">odhlásit</a>';
                 } else {
                     echo '<a href="login.php">přihlásit</a>';
                 }
@@ -31,7 +48,7 @@ $username = $_SESSION["username"];
                 <li><a href="index.php?id=vysledky">výsledky</a></li>
                 <li><a href="index.php?id=clenove">členové</a></li>
                 <?php
-                if ($auth)
+                if ($perm > 0)
                     echo '<li><a href="index.php?id=kontakt">kontakt</a></li>';
                 ?>
             </ul>
@@ -39,7 +56,9 @@ $username = $_SESSION["username"];
 
         <div id="content">
             <?php
-                $id = $_GET["id"];
+                $id = NULL;
+                if (isset($_GET["id"]))
+                    $id = $_GET["id"];
                 switch($id) {
                     case "kontakt": 
                         include('kontakt.php'); 
@@ -48,7 +67,7 @@ $username = $_SESSION["username"];
                         include('vysledky.php'); 
                         break;
                     case "clenove": 
-                        if ($auth) {
+                        if ($perm > 0) {
                             include('clenove.php'); 
                             break;
                         }
