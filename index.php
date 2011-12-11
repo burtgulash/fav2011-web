@@ -1,6 +1,9 @@
 <!doctype html>
 
 <?php
+include_once "redirect.php";
+
+
 function log_out()
 {
     if (isset($_SESSION["username"])) {
@@ -15,9 +18,7 @@ session_start();
 if (isset($_GET["logout"]))
     log_out();
 
-$perm = 0;
-if (isset($_SESSION["permissions"]))
-    $perm = $_SESSION["permissions"];
+$perm = getPermissions();
 $auth = isset($_SESSION["username"]);
 if ($auth)
     $username = $_SESSION["username"];
@@ -29,7 +30,7 @@ if ($auth)
     </head>
     <body>
         <div id="header">
-            <h2>SPORTKLUB</h2>
+            <h2><a href="index.php">SPORTKLUB</a></h2>
         </div>
 
         <div id="login">
@@ -46,10 +47,10 @@ if ($auth)
         <div id="nav">
             <ul>
                 <li><a href="index.php?id=vysledky">výsledky</a></li>
-                <li><a href="index.php?id=clenove">členové</a></li>
+                <li><a href="index.php?id=kontakt">kontakt</a></li>
                 <?php
                 if ($perm > 0)
-                    echo '<li><a href="index.php?id=kontakt">kontakt</a></li>';
+                    echo '<li><a href="index.php?id=clenove">členové</a></li>';
                 ?>
             </ul>
         </div>
