@@ -36,10 +36,11 @@ if ($auth)
         <div id="login">
             <?php
                 if ($auth) {
-                    echo $username;
-                    echo '<a href="index.php?logout=1">odhlásit</a>';
+                    echo "<a href='edit.php?user=$username'>
+                                                 $username</a><br />\n";
+                    echo "<a href='index.php?logout=1'>odhlásit</a>";
                 } else {
-                    echo '<a href="login.php">přihlásit</a>';
+                    echo "<a href='login.php'>přihlásit</a>";
                 }
             ?>
         </div>
