@@ -3,28 +3,35 @@ include_once "redirect.php";
 
 $perm = getPermissions();
 $dbfile = "data.db";
-if ($perm >= 2 && 
-    isset($_POST["newmatch"]) &&
-    isset($_POST["proti"]) &&
-    isset($_POST["my"]) &&
-    isset($_POST["oni"]))
-{
-    $date = "NOW";
-    if (isset($_POST["date"]))
-        $date = $_POST["date"];
+if (isset($_POST["newmatch"])) {
+    if ($perm >= 2 && 
+        isset($_POST["proti"]) &&
+        isset($_POST["my"]) &&
+        isset($_POST["oni"]) &&
+        !empty($_POST["proti"]) &&
+        !empty($_POST["my"]) &&
+        !empty($_POST["oni"]))
+    {
+        $date = "NOW";
+        if (isset($_POST["date"]))
+            $date = $_POST["date"];
 
-    $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
-    $query = sprintf("INSERT INTO scores (opponent, ours, theirs, timePlayed) 
-                    VALUES ('%s', '%s', '%s', JULIANDAY('%s'));", 
-                    $db->escapeString($_POST["proti"]),
-                    $db->escapeString($_POST["my"]),
-                    $db->escapeString($_POST["oni"]),
-                    $db->escapeString($date));
-    $db->exec($query);
+        $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
+        $query = sprintf("INSERT INTO scores (opponent, ours, theirs, timePlayed) 
+                        VALUES ('%s', '%s', '%s', JULIANDAY('%s'));", 
+                        $db->escapeString($_POST["proti"]),
+                        $db->escapeString($_POST["my"]),
+                        $db->escapeString($_POST["oni"]),
+                        $db->escapeString($date));
+        $db->exec($query);
 
-    $db->close();
+        $db->close();
+    }
+
     relative_redirect("index.php?id=vysledky");
 }
+if (!isset($fromIndex))
+    relative_redirect("index.php");
 
 if ($perm >= 2) {
     echo "" .

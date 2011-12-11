@@ -2,20 +2,25 @@
 include_once "redirect.php";
 
 $newsdb = "data.db";
-if (isset($_POST["newpost"]) && 
-    isset($_POST["title"]) && 
-    isset($_POST["article"])) 
-{
-    $db = new SQLite3($newsdb, SQLITE3_OPEN_READWRITE);
-    $query = sprintf("INSERT INTO news (title, article, timeEntered) VALUES
-                               ('%s', '%s', DATETIME('NOW'));",
-                    $db->escapeString($_POST["title"]), 
-                    $db->escapeString($_POST["article"]));
-    $db->exec($query);
-    $db->close();
+if (isset($_POST["newpost"])) {
+    if (isset($_POST["title"]) && 
+        isset($_POST["article"]) &&
+        !empty($_POST["title"]) &&
+        !empty($_POST["article"])) 
+    {
+        $db = new SQLite3($newsdb, SQLITE3_OPEN_READWRITE);
+        $query = sprintf("INSERT INTO news (title, article, timeEntered) VALUES
+                                   ('%s', '%s', DATETIME('NOW'));",
+                        $db->escapeString($_POST["title"]), 
+                        $db->escapeString($_POST["article"]));
+        $db->exec($query);
+        $db->close();
 
+    }
     relative_redirect("index.php");
 }
+if (!isset($fromIndex))
+    relative_redirect("index.php");
 
 if ($perm >= 2) {
     echo "<div>\n";

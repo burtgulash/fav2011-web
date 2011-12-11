@@ -60,6 +60,8 @@ if ($auth)
                 $id = NULL;
                 if (isset($_GET["id"]))
                     $id = $_GET["id"];
+
+                $fromIndex = true;
                 switch($id) {
                     case "kontakt": 
                         include('kontakt.php'); 

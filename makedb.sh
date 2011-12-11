@@ -18,6 +18,10 @@ sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni)
                   values ('pepa', '281ffbf5eb2a3916b9c1eb8f28637836', 1,
                            'Josef', 'Bro');"
 
+sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni) 
+                  values ('prizdisrac', 'b876ad7de4b292d3ba250d5686a6f160', 2,
+                           'Bebi', 'Bro');"
+
 # news table
 sqlite3 $dbfile "CREATE TABLE news (id INTEGER PRIMARY KEY, 
                                 title TEXT, article TEXT, timeEntered DATE);"
