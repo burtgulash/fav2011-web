@@ -5,16 +5,17 @@ $username = $_SESSION["username"];
 $perm = getPermissions();
 $dbfile = "data.db";
 
+// Pokud byl zaslán požadavek na přidání uživatele, přidáme ho do databáze.
 if (isset($_POST["newuser"])) {
     if ($perm >= 2 && !empty($_POST["name"]) && !empty($_POST["pass"])) {
         $pass_hash = md5($_POST["pass"]);
         $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
         $query = sprintf("SELECT 1 FROM users WHERE name='%s';",
                          $db->escapeString($_POST["name"]));
-        $res = $db->query($query);
+        $res = $db->query($query)->fetchArray(SQLITE3_ASSOC);
 
-        // TODO better check
-        if (count($res->fetchArray()) < 2) {
+        // Pokud uživatel neexistuje, můžeme ho přidat.
+        if (!$res) {
             $query = sprintf("INSERT INTO users (name, pass, jmeno, prijmeni) 
                                    VALUES ('%s', '%s', '%s', '%s');",
                              $db->escapeString($_POST["name"]),
@@ -22,15 +23,20 @@ if (isset($_POST["newuser"])) {
                              $db->escapeString($_POST["jmeno"]),
                              $db->escapeString($_POST["prijmeni"]));
             $db->exec($query);
+            $db->close();
+            relative_redirect("index.php?id=clenove");
         }
         $db->close();
-    }
 
-    relative_redirect("index.php?id=clenove&error=exists");
+        // Pokud se stala chyba, zobrazíme tuto stránku s chybou.
+        relative_redirect("index.php?id=clenove&error=exists");
+    }
 }
 
+// Požadavek na odstranění uživatele
 if (isset($_GET["removeuser"])) {
-    // don't delete yourself
+    // Musíme se ujistit, že uživatel, který chce někoho odstranit má nejvyšší
+    // práva a nemaže sebe.
     if ($perm >= 2 && $_GET["removeuser"] != $username) {
         $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
         $query = sprintf("DELETE FROM users WHERE name='%s';", 
@@ -41,18 +47,21 @@ if (isset($_GET["removeuser"])) {
     relative_redirect("index.php?id=clenove");
 }
 
+// Pokud se na tuto stránku někdo dostal jinak než měl, přesměrujeme ho správně.
 if (!isset($fromIndex))
-    relative_redirect("index.php");
+    relative_redirect("index.php?id=clenove");
 
-// handle GET errors
+// Pokud nastala chyba při vkládání nového uživatele, která nemohla být ověřena
+// u klienta, vypíšeme chybu.
 if (isset($_GET["error"])) {
-	switch ($_GET["error"]) {
-		case "exists":
-			echo "<p><b>Uživatel již existuje.</b></p><br />\n";
-			break;
-	}
+    switch ($_GET["error"]) {
+        case "exists":
+            echo "<p><b>Uživatel již existuje.</b></p><br />\n";
+            break;
+    }
 }
 
+// Hlavní uživatel může vkládat nové členy, může k tomu použít formulář.
 if ($perm >= 2) {
     echo "" .
 "    <form method='post' action='clenove.php' accept-charset='UTF-8'>\n" .
@@ -70,6 +79,7 @@ if ($perm >= 2) {
 "    <br />\n";
 }
 
+// Vypíšeme všechny členy z databáze.
 $db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
 $query = "SELECT name, jmeno, prijmeni, telCislo FROM users;";
 $result = $db->query($query);

@@ -3,6 +3,8 @@
 <?php
 include "redirect.php";
 
+// Funkce, která přihlásí uživatele. V případě úspěchu vrací true, 
+// v opačném false.
 function login_successful()
 {
     if (empty($_POST["username"]))
@@ -20,25 +22,29 @@ function login_successful()
     return true;
 }
 
-
+// Pomocná funkce, která zkontroluje, jestli sedí uživatel a jeho heslo.
 function check_database($name, $pass)
 {
     $userdb = "data.db";
     $db = new SQLite3($userdb, SQLITE3_OPEN_READONLY);
+    // Hesla jsou šifrována md5 hash funkcí.
     $pass_hash = md5($pass);
+
+    // Dotaz na databázi, jestli existuje uživatel a má správné heslo.
     $query = sprintf("SELECT 1 FROM users WHERE name='%s' AND pass='%s';", 
              $db->escapeString($name), $db->escapeString($pass_hash));
 
-    $res = $db->query($query);
-    // TODO shit
-    if (count($res->fetchArray()) == 2) {
-        $db->close();
-        return true;
-    }
+    $res = $db->query($query)->fetchArray(SQLITE3_ASSOC);
     $db->close();
+    if ($res)
+        return true;
     return false;
 }
 
+
+// Získat uživatelská práva, není zkontrolováno, jestli uživatel existuje,
+// proto není vhodné tuto funkci používat jinde než v login_successful, kde
+// je tento případ už ošetřen.
 function get_user_permissions($username)
 {
     $userdb = "data.db";
@@ -49,17 +55,17 @@ function get_user_permissions($username)
     return $res["permissions"];
 }
 
-// if already logged in, redirect to index
+// Pokud je uživatel už přihlášen, přesměrujeme ho na úvodní stránku.
 if (isset($_SESSION["username"]))
     relative_redirect("index.php");
 
-// try logging in
+// Zde probíhá přihlášení.
 if (isset($_POST["submitted"]))
     if (login_successful())
         relative_redirect("index.php");
 
 
-// prepopulate name field
+// Při neúspěšném přihlášení předvyplníme pole "uživatelské jméno".
 $name_entered = "";
 if (isset($_POST["username"]))
     $name_entered = $_POST["username"];

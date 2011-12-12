@@ -2,7 +2,8 @@
     include_once "redirect.php";
     session_start();
 
-
+    // Pokud se někdo dostal na tuhle stránku jiným způsobem, přeposlat ho
+    // na úvodní stránku
     if (!isset($_GET["user"]) || !isset($_SESSION["username"]))
         relative_redirect("index.php");
 
@@ -10,13 +11,15 @@
     $perm = getPermissions();
     $dbfile = "data.db";
 
-    // Don't have permissions to edit this user
+    // Pokud nemá uživatel dostatečná oprávnění k úpravě profilu...
     if ($perm < 2 && $_SESSION["username"] != $username)
         relative_redirect("index.php");
 
+    // Vyhodnotit požadavek na změnu údajů
     if (isset($_POST["editted"])) {
         $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
 
+        // Při změně hesla vytvořit dotaz na změnu hesla
         $pass_update = "";
         if (isset($_POST["pass"]) && isset($_POST["passcheck"]) &&
             !empty($_POST["pass"]) && !empty($_POST["passcheck"])) 
@@ -28,6 +31,7 @@
             }
         }
 
+        // Dotaz na změnu údajů a jeho vykonání
         $query = sprintf("UPDATE users SET jmeno='%s', prijmeni='%s',
                           telCislo='%s'" . $pass_update .
                           "WHERE name='%s';", 
@@ -38,15 +42,16 @@
         $db->exec($query);
         $db->close();
 
+        // při úspěšné změně údajů přeposlat uživatele na stejnou stránku
         $success_url = "edit.php?success=1&user=" . $username;
         relative_redirect($success_url);
     }
 
+    // Dotaz k vyhledání uživatele v databázi
     $db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
     $query = sprintf("SELECT jmeno, prijmeni, telCislo FROM users
                        WHERE name='%s';", $db->escapeString($username));
     $db_user = $db->query($query)->fetchArray(SQLITE3_ASSOC);
-    // TODO check if db_user empty
 ?>
 <html>
     <head>
@@ -54,6 +59,14 @@
     </head>
     <body>
         <?php
+            // Pokud uživatel nebyl nalezen, můžeme rovnou skončit.
+            if (!$db_user) {
+                echo "<p><b>Neexistující uživatel</b></p>\n";
+                echo "    </body>\n</html>";
+                $db->close();
+                exit;
+            }
+            // V případě úspěchu dáme vědět hláškou
             if (isset($_GET["success"]))
                 echo "<p><b>Údaje úspěšně změněny.</b></p>";
         ?>

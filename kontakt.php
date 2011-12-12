@@ -1,8 +1,10 @@
 <?php
 include_once "redirect.php";
 
+// Pokud se někdo dostal na tuto stránku, přesměrujeme ho na tuto stránku
+// správným způsobem.
 if (!isset($fromIndex))
-    relative_redirect("index.php");
+    relative_redirect("index.php?id=kontakt");
 ?>
 
 Fodbalový klup <b>Kopalisté</b>.

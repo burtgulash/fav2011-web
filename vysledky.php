@@ -3,6 +3,9 @@ include_once "redirect.php";
 
 $perm = getPermissions();
 $dbfile = "data.db";
+
+// Pokud byl zaslán požadavek na přidání nového zápasu, který má neprázdná data,
+// vložíme ho do databáze.
 if (isset($_POST["newmatch"])) {
     if ($perm >= 2 && 
         isset($_POST["proti"]) &&
@@ -12,6 +15,7 @@ if (isset($_POST["newmatch"])) {
         !empty($_POST["my"]) &&
         !empty($_POST["oni"]))
     {
+        // Pokud nebyl zadán datum zápasu, použijeme momentální čas.
         $date = "NOW";
         if (isset($_POST["date"]))
             $date = $_POST["date"];
@@ -30,9 +34,12 @@ if (isset($_POST["newmatch"])) {
 
     relative_redirect("index.php?id=vysledky");
 }
+// Pokud se někdo na tuto stránku dostal jinak, přesměrujeme ho správně.
 if (!isset($fromIndex))
-    relative_redirect("index.php");
+    relative_redirect("index.php?id=vysledky");
 
+// Hlavní uživatel může vkládat nové odehrané zápasy, může k tomu použít 
+// formulář.
 if ($perm >= 2) {
     echo "" .
 "    <form method='post' action='vysledky.php' accept-charset='UTF-8'>\n" .
@@ -57,6 +64,7 @@ if ($perm >= 2) {
     </tr>
 
 <?php
+// Vypíšeme deset nejnovějších zápasů.
 $db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
 $query = "SELECT opponent, ours, theirs,
                  strftime('%d.%m.%Y',timePlayed) AS datePlayed 

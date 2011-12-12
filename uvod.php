@@ -2,6 +2,8 @@
 include_once "redirect.php";
 
 $newsdb = "data.db";
+// Pokud byl zaslán požadavek na nový neprázdný příspěvek,
+// vložíme ho do databáze.
 if (isset($_POST["newpost"])) {
     if (isset($_POST["title"]) && 
         isset($_POST["article"]) &&
@@ -19,25 +21,29 @@ if (isset($_POST["newpost"])) {
     }
     relative_redirect("index.php");
 }
+// Pokud se na tuto stránku dostal někdo jinak, přesměrujeme ho správně.
 if (!isset($fromIndex))
     relative_redirect("index.php");
 
+// Hlavní uživatel může přispívat nové zprávy, poskytneme mu k tomu formulář.
 if ($perm >= 2) {
-    echo "<div>\n";
-    echo "<form action='uvod.php' method='post' accept-charset='UTF-8'>\n";
-    echo "<input type='hidden' name='newpost' value='1' />\n";
-    echo "<label for='title'>Nová zpráva:</label><br />\n";
-    echo "<input id='title' type='text' name='title' /><br />\n";
-    echo "<textarea id='article' name='article' cols='40' rows='5'>\n";
-    echo "</textarea><br />\n";
-    echo "<input type='submit' name='submit' value='Nový příspěvek' /><br />\n";
-    echo "</form>\n";
-    echo "</div>\n";
-    echo "<br />\n";
+echo "".
+"        <div>\n" .
+"          <form action='uvod.php' method='post' accept-charset='UTF-8'>\n" .
+"            <input type='hidden' name='newpost' value='1' />\n" .
+"            <label for='title'>Nová zpráva:</label><br />\n" .
+"            <input id='title' type='text' name='title' /><br />\n" .
+"            <textarea id='article' name='article' cols='40' rows='5'>\n" .
+"            </textarea><br />\n" .
+"            <input type='submit' name='submit' value='Nový příspěvek' />" .
+"            <br />\n" .
+"        </form>\n" .
+"       </div>\n" .
+"       <br />\n";
 }
 
+// Získáme z databáze pět nejnovějších příspěvků a zobrazíme je.
 $db = new SQLite3($newsdb, SQLITE3_OPEN_READONLY);
-
 $query = "SELECT title, article, timeEntered FROM news 
                    ORDER BY timeEntered DESC LIMIT 0,5;";
 $result = $db->query($query);
