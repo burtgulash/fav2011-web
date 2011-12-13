@@ -29,30 +29,33 @@ if ($auth)
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="css/styles.css" />
+        <link rel="stylesheet" type="text/css" href="css/styles.css" />
         <title>SportKlub</title>
     </head>
     <body>
         <div id="header">
-            <h2 id="title"><a href="index.php">SPORTKLUB</a></h2>
+            <a href="index.php">
+                <span id="main_title">Kopáči</span>
+                <span id="sub_title">fotbalový klub</span>
+            </a>
         </div>
 
         <div id="login">
-			<ul>
+            <ul>
             <?php
                 // Pokud je uživatel přihlášen, zobrazit jeho jméno a odkaz na
                 // odhlášení. V opačném případě nabídneme odkaz na přihlášení.
                 if ($auth) {
-					echo "<li>\n";
+                    echo "<li>\n";
                     echo "<a id='username' href='edit.php?user=$username'>
                                                  $username</a>\n";
-					echo "</li><li>\n";
+                    echo "</li><li>\n";
                     echo "<a href='index.php?logout=1'>odhlásit</a>";
-					echo "</li>\n";
+                    echo "</li>\n";
                 } else
                     echo "<li><a href='login.php'>přihlásit</a></li>\n";
             ?>
-			</ul>
+            </ul>
         </div>
 
         <div id="nav">

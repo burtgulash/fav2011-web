@@ -68,7 +68,7 @@ if ($perm >= 2) {
 $db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
 $query = "SELECT opponent, ours, theirs,
                  strftime('%d.%m.%Y',timePlayed) AS datePlayed 
-                 FROM scores ORDER BY timePlayed DESC LIMIT 0,10;";
+                 FROM scores ORDER BY timePlayed DESC;";
 $result = $db->query($query);
 
 while ($match = $result->fetchArray(SQLITE3_ASSOC)) {

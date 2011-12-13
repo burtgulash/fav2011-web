@@ -31,7 +31,23 @@ sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
                              DATETIME('NOW'));"
 
 sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
-                           ('Jsme tym', 'Mame velky, maly tym, jo.',
+                           ('Další zpráva', 'no tak to jóó.',
+                             DATETIME('NOW'));"
+
+sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
+                           ('Prdka', 'Prdí.',
+                             DATETIME('NOW'));"
+
+sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
+                           ('Honza', 'Bonza',
+                             DATETIME('NOW'));"
+
+sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
+                           ('Pepa', 'Byl přidááan.',
+                             DATETIME('NOW'));"
+
+sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
+                           ('Honza', 'tiěž.',
                              DATETIME('NOW'));"
 
 # scores table

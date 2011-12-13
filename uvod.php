@@ -44,15 +44,51 @@ echo "".
 
 // Získáme z databáze pět nejnovějších příspěvků a zobrazíme je.
 $db = new SQLite3($newsdb, SQLITE3_OPEN_READONLY);
-$query = "SELECT title, article, timeEntered FROM news 
-                   ORDER BY timeEntered DESC LIMIT 0,5;";
+
+$page = 0;
+if (isset($_GET["page"])) {
+    $num = (int) $_GET["page"];
+    if ($num > 0)
+        $page = $num;
+}
+$start = $page * 5;
+$end = $start + 5;
+
+$query = "SELECT title, article, strftime('%H:%M, %d.%m.%Y', timeEntered)
+                   AS time FROM news 
+                   ORDER BY timeEntered DESC LIMIT ".$start.", ".$end.";";
 $result = $db->query($query);
 
 while($article = $result->fetchArray(SQLITE3_ASSOC)) {
-    echo "            " . $article['timeEntered'] . "<br />\n";
-    echo "            <b>" . $article['title'] . "</b> <br />\n";
-    echo "            " . $article['article'] . "<br /><br />\n";
+    echo "        <div class='a_body'>\n";
+    echo "            <span class='a_title'>" . $article['title'] . "</span>\n";
+    echo "            <p class='article'>" . $article['article'] . "</p>\n";
+    echo "            <span class='timedate article'>" . $article['time'] . 
+                     "</span>\n";
+    echo "        </div>\n";
 }
+
+
+echo "<ul>\n";
+// Pokud existují novější příspěvky, dáme uživateli možnost se na ně přesunout
+if ($page > 0) {
+    $newer = $page - 1;
+    echo "<li>\n";
+    echo "<a class='pagelink' href='index.php?page=$newer'>novější</a>\n";
+    echo "</li>\n";
+}
+
+// Pokud existují starší, rovněž.
+$query = "SELECT COUNT(title) FROM news";
+$result= $db->query($query)->fetchArray(SQLITE3_ASSOC);
+$numArticles = $result["COUNT(title)"];
+if ($numArticles > $end) {
+    $older = $page + 1;
+    echo "<li>\n";
+    echo "<a class='pagelink' href='index.php?page=$older'>starší</a>\n";
+    echo "</li>\n";
+}
+echo "</ul>\n";
 
 $db->close();
 ?>

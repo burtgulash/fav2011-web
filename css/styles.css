@@ -1,21 +1,19 @@
 body {
 	color: #111;
-	font: 16px sans-serif;
-	width: 95%;
+	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
+	padding: 1em;
 }
 
 a {
 	text-decoration: none;
 	color: #111;
-	font: 16px sans-serif;
+	font: 18px sans-serif;
 }
 
 a:hover {
 	text-decoration: underline;
-	color: #111;
-	font: 16px sans-serif;
 }
 
 ul {
@@ -30,20 +28,56 @@ li {
 	padding: 10px;
 }
 
+.a_title {
+	font: bold 33px sans-serif;
+	color: #3399FF;
+}
+
+.a_body {
+	margin-bottom: 25px;
+	padding: 1ex;
+}
+
+.article {
+	font: 16px sans-serif;
+	margin-left: 15pt;
+}
+
+.timedate {
+	font: italic 12px sans-serif;
+}
+
+.pagelink {
+	font: bold 20px sans-serif;
+}
+
+
+#header {
+	float: left;
+	margin-bottom: 60px;
+}
+
+#header a {
+	text-decoration: none;
+}
+
 #content {
-	background-color: #efefef;
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
 	padding: 1em;
 	clear: both;
 }
 
-#title {
-	float: left;
+#main_title {
+	display: block;
+	font: bolder 70px sans-serif;
+	font-variant: small-caps;
 }
 
-#title a {
-	text-decoration: none;
-	color: #800000;
-	font: bold 38px sans-serif;
+#sub_title {
+	display: block;
+	font: 28px sans-serif;
 }
 
 #username {
@@ -55,7 +89,7 @@ li {
 }
 
 #login a {
-	font-size: 18px;
+	font-size: 25px;
 }
 
 #nav {
