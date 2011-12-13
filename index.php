@@ -1,7 +1,7 @@
 <!doctype html>
 
 <?php
-include_once "redirect.php";
+include_once "globals.php";
 
 // Slouží pouze k odhlášení uživatele
 function log_out()
@@ -30,44 +30,48 @@ if ($auth)
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" type="text/css" href="css/styles.css" />
-        <title>SportKlub</title>
+        <title>Kopáči</title>
     </head>
     <body>
         <div id="header">
-            <a href="index.php">
-                <span id="main_title">Kopáči</span>
-                <span id="sub_title">fotbalový klub</span>
-            </a>
-        </div>
+            <div id="inner_header">
+                <div id="title">
+                    <a href="index.php">
+                        <span id="main_title">Kopáči</span>
+                        <span id="sub_title">fotbalový klub</span>
+                    </a>
+                </div>
 
-        <div id="login">
-            <ul>
-            <?php
-                // Pokud je uživatel přihlášen, zobrazit jeho jméno a odkaz na
-                // odhlášení. V opačném případě nabídneme odkaz na přihlášení.
-                if ($auth) {
-                    echo "<li>\n";
-                    echo "<a id='username' href='edit.php?user=$username'>
-                                                 $username</a>\n";
-                    echo "</li><li>\n";
-                    echo "<a href='index.php?logout=1'>odhlásit</a>";
-                    echo "</li>\n";
-                } else
-                    echo "<li><a href='login.php'>přihlásit</a></li>\n";
-            ?>
-            </ul>
-        </div>
+                <div id="header_login">
+                    <ul>
+                    <?php
+                        // Pokud je uživatel přihlášen, zobrazit jeho jméno a odkaz na
+                        // odhlášení. V opačném případě nabídneme odkaz na přihlášení.
+                        if ($auth) {
+                            echo "<li>\n";
+                            echo "<a id='header_username' href='edit.php?user=$username'>
+                                                         $username</a>\n";
+                            echo "</li><li>\n";
+                            echo "<a href='index.php?logout=1'>odhlásit</a>";
+                            echo "</li>\n";
+                        } else
+                            echo "<li><a href='index.php?id=login'>přihlásit</a></li>";
+                    ?>
+                    </ul>
+                </div>
 
-        <div id="nav">
-            <ul>
-                <li><a href="index.php?id=vysledky">výsledky</a></li>
-                <li><a href="index.php?id=kontakt">kontakt</a></li>
-                <?php
-                // Pokud je uživatel přihlášen, nabídneme mu i členy týmu.
-                if ($perm > 0)
-                    echo '<li><a href="index.php?id=clenove">členové</a></li>';
-                ?>
-            </ul>
+                <div id="nav">
+                    <ul>
+                        <li><a href="index.php?id=vysledky">výsledky</a></li>
+                        <li><a href="index.php?id=kontakt">kontakt</a></li>
+                        <?php
+                        // Pokud je uživatel přihlášen, nabídneme mu i členy týmu.
+                        if ($perm > 0)
+                            echo '<li><a href="index.php?id=clenove">členové</a></li>';
+                        ?>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <div id="content">
@@ -79,6 +83,9 @@ if ($auth)
 
                 $fromIndex = true;
                 switch($id) {
+                    case "login":
+                        include('login.php');
+                        break;
                     case "kontakt": 
                         include('kontakt.php'); 
                         break;
@@ -93,6 +100,9 @@ if ($auth)
                     default: include('uvod.php');
                 }
             ?>
+        </div>
+
+        <div id="footer">
         </div>
     </body>
 </html>

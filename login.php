@@ -1,7 +1,5 @@
-<!doctype html>
-
 <?php
-include "redirect.php";
+include_once "globals.php";
 
 // Funkce, která přihlásí uživatele. V případě úspěchu vrací true, 
 // v opačném false.
@@ -63,31 +61,35 @@ if (isset($_SESSION["username"]))
 if (isset($_POST["submitted"]))
     if (login_successful())
         relative_redirect("index.php");
+    else  {
+        $prefill_username = "";
+        if (isset($_POST["username"]))
+            $prefill_username = $_POST["username"];
+
+        relative_redirect("index.php?id=login&username=" . $prefill_username);
+    }
+
+// Pokud se na tuto stránku dostal někdo jinak, přesměrujeme ho správně.
+else if (!isset($fromIndex))
+    relative_redirect("index.php?id=login");
 
 
 // Při neúspěšném přihlášení předvyplníme pole "uživatelské jméno".
 $name_entered = "";
-if (isset($_POST["username"]))
-    $name_entered = $_POST["username"];
+if (isset($_GET["username"]))
+    $name_entered = $_GET["username"];
 ?>
 
+<h1 class="section_title">Přihlásit se</h1>
 
-<html>
-    <head>
-        <title>SportKlub přihlášení</title>
-    </head>
-    <body>
-        <form id="login" action="login.php" method="post" accept-charset="UTF-8">
-            <fieldset>
-                <legend>Přihlásit se</legend>
-                <input type="hidden" name="submitted" value="1" />
-                <label for="username">Jméno:</label>
-                <input id="username" maxlength="50" name="username" 
-                       type="text" value="<?php echo $name_entered?>"/>
-                <label for="pass">Heslo:</label>
-                <input id="pass" maxlength="50" name="pass" type="password" />
-                <input name="submit" type="submit" value="Přihlásit se" />
-            </fieldset>
-        </form>
-    </body>
-</html>
+<!-- Formulář k přihlášení uživatele -->
+<form class="form" id="login_form" action="login.php" 
+                                       method="post" accept-charset="UTF-8">
+    <input type="hidden" name="submitted" value="1" />
+    <label for="username">Jméno:</label>
+    <input class="field" maxlength="50" name="username" type="text" 
+               value="<?php echo $name_entered?>"/>
+    <label for="pass">Heslo:</label>
+    <input class="field" maxlength="50" name="pass" type="password" />
+    <input type="submit" value="Přihlásit se" />
+</form>

@@ -1,5 +1,5 @@
 <?php
-include_once "redirect.php";
+include_once "globals.php";
 
 $perm = getPermissions();
 $dbfile = "data.db";
@@ -38,29 +38,46 @@ if (isset($_POST["newmatch"])) {
 if (!isset($fromIndex))
     relative_redirect("index.php?id=vysledky");
 
+
+echo "<h1 class='section_title'>Odehrané zápasy</h1>\n";
+
 // Hlavní uživatel může vkládat nové odehrané zápasy, může k tomu použít 
 // formulář.
 if ($perm >= 2) {
     echo "" .
-"    <form method='post' action='vysledky.php' accept-charset='UTF-8'>\n" .
+"    <form id='score_form' class='form' method='post' action='vysledky.php'".
+"                                          accept-charset='UTF-8'>\n" .
+"        <h1>Nový zápas</h1>\n" .
 "        <input name='newmatch' type='hidden' value='1' />\n" .
-"        <label for='proti'>Proti:</label>\n" .
-"        <input name='proti' type='text' /><br />\n" .
-"        <label for='my'>Naše skóre:</label>\n" .
-"        <input name='my' type='text' /><br />\n" .
-"        <label for='oni'>Jejich skóre:</label>\n" .
-"        <input name='oni' type='text' /><br />\n" .
-"        <label for='date'>Datum zápasu:</label>\n" .
-"        <input name='date' type='date' /><br />\n" .
+"        <label for='proti'>\n".
+"            Proti:\n" .
+"            <span>Tým protivníka</span>" .
+"        </label>\n" .
+"        <input class='field' name='proti' type='text' />\n" .
+"        <label for='my'>\n" .
+"            My:\n" .
+"            <span>Naše skóre</span>\n" .
+"        </label>\n" .
+"        <input class='field' name='my' type='text' /><br />\n" .
+"        <label for='oni'>\n" .
+"            oni:\n" .
+"            <span>Jejich skóre</span>\n" .
+"        </label>\n" .
+"        <input class='field' name='oni' type='text' /><br />\n" .
+"        <label for='date'>" .
+"            Datum zápasu:" .
+"             <span>9999-12-31</span>\n" .
+"         </label>\n" .
+"        <input class='field' name='date' type='date' /><br />\n" .
 "        <input type='submit' name='submit' value='vložit' /><br />\n" .
 "    </form>";
 }
 ?>
-<table border="1">
+<table id="vysledky">
     <tr>
         <th>datum</th>
         <th>proti</th>
-        <th>my:oni</th>
+        <th>skóre</th>
     </tr>
 
 <?php
@@ -72,7 +89,12 @@ $query = "SELECT opponent, ours, theirs,
 $result = $db->query($query);
 
 while ($match = $result->fetchArray(SQLITE3_ASSOC)) {
-    echo "<tr>\n";
+    if ($match["ours"] >= $match["theirs"])
+        $match_result = "win";
+    else
+        $match_result = "loss";
+
+    echo "<tr class='$match_result'>\n";
 
     echo "<td>";
     echo $match["datePlayed"];
@@ -83,7 +105,7 @@ while ($match = $result->fetchArray(SQLITE3_ASSOC)) {
     echo "</td>\n";
 
     echo "<td>";
-    echo $match["ours"] . ":" . $match["theirs"];
+    echo $match["ours"] . " : " . $match["theirs"];
     echo "</td>\n";
     echo "</tr>\n";
 }

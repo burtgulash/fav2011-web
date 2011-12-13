@@ -1,5 +1,5 @@
 <?php
-include_once "redirect.php";
+include_once "globals.php";
 
 $newsdb = "data.db";
 // Pokud byl zaslán požadavek na nový neprázdný příspěvek,
@@ -25,16 +25,18 @@ if (isset($_POST["newpost"])) {
 if (!isset($fromIndex))
     relative_redirect("index.php");
 
+echo "<h1 class='section_title'>Novinky</h1>\n";
+
 // Hlavní uživatel může přispívat nové zprávy, poskytneme mu k tomu formulář.
 if ($perm >= 2) {
 echo "".
 "        <div>\n" .
-"          <form action='uvod.php' method='post' accept-charset='UTF-8'>\n" .
+"          <form id='article_form' class='form' action='uvod.php'" .
+"                              method='post' accept-charset='UTF-8'>\n" .
+"            <h1>Nová zpráva</h1>\n" .
 "            <input type='hidden' name='newpost' value='1' />\n" .
-"            <label for='title'>Nová zpráva:</label><br />\n" .
-"            <input id='title' type='text' name='title' /><br />\n" .
-"            <textarea id='article' name='article' cols='40' rows='5'>\n" .
-"            </textarea><br />\n" .
+"            <input class='field' type='text' name='title' /><br />\n" .
+"            <textarea name='article' cols='40' rows='5'></textarea>\n" .
 "            <input type='submit' name='submit' value='Nový příspěvek' />" .
 "            <br />\n" .
 "        </form>\n" .

@@ -1,5 +1,5 @@
 <?php
-    include_once "redirect.php";
+    include_once "globals.php";
     session_start();
 
     // Pokud se někdo dostal na tuhle stránku jiným způsobem, přeposlat ho

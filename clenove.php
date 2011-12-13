@@ -1,5 +1,5 @@
 <?php
-include_once "redirect.php";
+include_once "globals.php";
 
 $username = $_SESSION["username"];
 $perm = getPermissions();
@@ -7,7 +7,9 @@ $dbfile = "data.db";
 
 // Pokud byl zaslán požadavek na přidání uživatele, přidáme ho do databáze.
 if (isset($_POST["newuser"])) {
-    if ($perm >= 2 && !empty($_POST["name"]) && !empty($_POST["pass"])) {
+    if ($perm >= HIGH_PERMISSIONS && 
+        !empty($_POST["name"]) && !empty($_POST["pass"])) 
+    {
         $pass_hash = md5($_POST["pass"]);
         $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
         $query = sprintf("SELECT 1 FROM users WHERE name='%s';",
@@ -37,7 +39,7 @@ if (isset($_POST["newuser"])) {
 if (isset($_GET["removeuser"])) {
     // Musíme se ujistit, že uživatel, který chce někoho odstranit má nejvyšší
     // práva a nemaže sebe.
-    if ($perm >= 2 && $_GET["removeuser"] != $username) {
+    if ($perm >= HIGH_PERMISSIONS && $_GET["removeuser"] != $username) {
         $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
         $query = sprintf("DELETE FROM users WHERE name='%s';", 
                          $db->escapeString($_GET["removeuser"]));
@@ -62,22 +64,26 @@ if (isset($_GET["error"])) {
 }
 
 // Hlavní uživatel může vkládat nové členy, může k tomu použít formulář.
-if ($perm >= 2) {
+if ($perm >= HIGH_PERMISSIONS) {
     echo "" .
-"    <form method='post' action='clenove.php' accept-charset='UTF-8'>\n" .
+"    <form id='member_form' class='form' method='post'" .
+"                         action='clenove.php' accept-charset='UTF-8'>\n" .
+"        <h1>Nový uživatel</h1>\n" .
 "        <input name='newuser' type='hidden' value='1' />\n" .
 "        <label for='name'>Uživatelské jméno:</label>\n" .
-"        <input name='name' type='text' /><br />\n" .
+"        <input class='field' name='name' type='text' /><br />\n" .
 "        <label for='pass'>Heslo:</label>\n" .
-"        <input name='pass' type='password' /><br />\n" .
+"        <input class='field' name='pass' type='password' /><br />\n" .
 "        <label for='jmeno'>Jméno:</label>\n" .
-"        <input name='jmeno' type='text' /><br />\n" .
+"        <input class='field' name='jmeno' type='text' /><br />\n" .
 "        <label for='prijmeni'>Příjmení:</label>\n" .
-"        <input name='prijmeni' type='text' /><br />\n" .
+"        <input class='field' name='prijmeni' type='text' /><br />\n" .
 "        <input type='submit' name='submit' value='Přidat uživatele'/>\n" .
 "    </form>\n" .
 "    <br />\n";
 }
+
+echo "<h1 class='section_title'>Členové týmu</h1>\n";
 
 // Vypíšeme všechny členy z databáze.
 $db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
@@ -87,15 +93,17 @@ $result = $db->query($query);
 while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
     echo "" .
 "        <div class='user'>\n" .
-"            <b>" . $user["name"] . "</b><br />\n" .
+"            <span class='m_username'>" . $user["name"] . "</span><br />\n" .
+"            <p class='m_info'>\n" .
 "            Jméno: " . $user["jmeno"] . "<br />\n" .
 "            Příjmení: " . $user["prijmeni"] . "<br />\n" .
-"            Telefonní číslo: " . $user["telCislo"] . "<br />\n";
+"            Telefonní číslo: " . $user["telCislo"] . "<br />\n" .
+"            </p>\n";
     // don't delete yourself
-    if ($perm >= 2 && $user["name"] != $username)
+    if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username)
         echo "" .
-"            <a href='clenove.php?removeuser=" . $user["name"] . "'>
-                                                     odstranit</a><br />\n";
+"            <a class='removelink' href='clenove.php?removeuser=" . 
+             $user["name"] . "'>odstranit</a><br />\n";
 
     echo "" .
 "            </div><br />\n";
