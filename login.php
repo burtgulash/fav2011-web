@@ -23,8 +23,7 @@ function login_successful()
 // Pomocná funkce, která zkontroluje, jestli sedí uživatel a jeho heslo.
 function check_database($name, $pass)
 {
-    $userdb = "data.db";
-    $db = new SQLite3($userdb, SQLITE3_OPEN_READONLY);
+    $db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
     // Hesla jsou šifrována md5 hash funkcí.
     $pass_hash = md5($pass);
 
@@ -45,8 +44,7 @@ function check_database($name, $pass)
 // je tento případ už ošetřen.
 function get_user_permissions($username)
 {
-    $userdb = "data.db";
-    $db = new SQLite3($userdb, SQLITE3_OPEN_READONLY);
+    $db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
     $query = sprintf("SELECT permissions FROM users WHERE name='%s';",
                       $db->escapeString($username));
     $res = $db->query($query)->fetchArray();

@@ -49,8 +49,8 @@ li {
 }
 
 .pagelink, .removelink {
-	display: block;
 	font: bold 20px sans-serif;
+	margin-right: 30px;
 }
 
 #header {
@@ -145,6 +145,15 @@ li {
 	border-bottom: 1px solid #DDD;
 }
 
+input[type=submit] {
+	clear: both;
+	background: #EEE;
+	border: 1px solid #777;
+	padding: 1ex;
+	width: 150px;
+	text-align: center;
+}
+
 #login_form input[type=submit] {
 	margin-top: 25px;
 	margin-left: 190px;
@@ -154,9 +163,12 @@ li {
 	margin-left: 20px;
 }
 
-#score_form input[type=submit], #member_form input[type=submit] {
+#score_form input[type=submit], 
+#member_form input[type=submit],
+#edit_form input[type=submit] {
 	margin-left: 170px;
 }
+
 
 #article_form .field {
 	width: 550px;
@@ -209,14 +221,6 @@ li {
 	width: 250px;
 }
 
-input[type=submit] {
-	clear: both;
-	background: #EEE;
-	border: 1px solid #777;
-	padding: 1ex;
-	width: 150px;
-	text-align: center;
-}
 
 .m_info {
 	margin: 3px 10px 1px 20px;

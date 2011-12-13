@@ -1,98 +1,117 @@
+<h1 class="section_title">Změna údajů</h1>
+<p>Heslo není třeba vyplňovat, pokud nemá být změněno.</p>
+<br />
+
 <?php
     include_once "globals.php";
-    session_start();
 
     // Pokud se někdo dostal na tuhle stránku jiným způsobem, přeposlat ho
     // na úvodní stránku
-    if (!isset($_GET["user"]) || !isset($_SESSION["username"]))
+    if (!isset($_GET["user"]))
         relative_redirect("index.php");
 
     $username = $_GET["user"];
     $perm = getPermissions();
-    $dbfile = "data.db";
 
-    // Pokud nemá uživatel dostatečná oprávnění k úpravě profilu...
-    if ($perm < 2 && $_SESSION["username"] != $username)
+    // Pokud není uživatel přihlášen nebo pokud nemá dostatečná oprávnění
+    // k úpravě profilu, přesměrujeme ho na úvodní stránku.
+    if (!isset($_SESSION["username"]) || 
+        ($perm < HIGH_PERMISSIONS && $_SESSION["username"] != $username))
         relative_redirect("index.php");
 
     // Vyhodnotit požadavek na změnu údajů
     if (isset($_POST["editted"])) {
-        $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
+        $successful_update = true;
 
-        // Při změně hesla vytvořit dotaz na změnu hesla
+        // Při změně hesla vytvořit dotaz na změnu hesla.
+        // Pokud jsou obě hesla prázdná, přeskočit změnu hesla.
         $pass_update = "";
         if (isset($_POST["pass"]) && isset($_POST["passcheck"]) &&
-            !empty($_POST["pass"]) && !empty($_POST["passcheck"])) 
+            !(empty($_POST["pass"]) && empty($_POST["passcheck"])))
         {
-            // pass1 == pass2 ?
-            if ($_POST["pass"] == $_POST["passcheck"]) {
+            // Pokud je jedno z hesel vyplněné, jedná se o chybu.
+            if (empty($_POST["pass"]) || empty($_POST["passcheck"]))
+                $successful_update = false;
+            else if ($_POST["pass"] == $_POST["passcheck"]) {
+                // pass1 == pass2 ?
                 $pass_hash = md5($_POST["pass"]);
                 $pass_update = ", pass='$pass_hash'";
-            }
+            } else
+                $successful_update = false;
         }
 
-        // Dotaz na změnu údajů a jeho vykonání
-        $query = sprintf("UPDATE users SET jmeno='%s', prijmeni='%s',
-                          telCislo='%s'" . $pass_update .
-                          "WHERE name='%s';", 
-                          $db->escapeString($_POST["jmeno"]),
-                          $db->escapeString($_POST["prijmeni"]),
-                          $db->escapeString($_POST["telCislo"]),
-                          $db->escapeString($_GET["user"]));
-        $db->exec($query);
-        $db->close();
+        if ($successful_update) {
+            $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
+
+            // Dotaz na změnu údajů a jeho vykonání
+            $query = sprintf("UPDATE users SET jmeno='%s', prijmeni='%s',
+                              telCislo='%s'" . $pass_update .
+                              "WHERE name='%s';", 
+                              $db->escapeString($_POST["jmeno"]),
+                              $db->escapeString($_POST["prijmeni"]),
+                              $db->escapeString($_POST["telCislo"]),
+                              $db->escapeString($_GET["user"]));
+            if (!($db->exec($query)))
+                $successful_update = false;
+            $db->close();
+        }
 
         // při úspěšné změně údajů přeposlat uživatele na stejnou stránku
-        $success_url = "edit.php?success=1&user=" . $username;
-        relative_redirect($success_url);
+        $return_url = "index.php?id=uprava&user=" . $username . "&success=";
+        if ($successful_update)
+            $return_url = $return_url . "1";
+        else
+            $return_url = $return_url . "0";
+
+        relative_redirect($return_url);
     }
 
+    // Přesměrovat špatný vstup na tuto stránku.
+    if (!isset($fromIndex))
+        relative_redirect("index.php");
+
+
     // Dotaz k vyhledání uživatele v databázi
-    $db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
+    $db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
     $query = sprintf("SELECT jmeno, prijmeni, telCislo FROM users
                        WHERE name='%s';", $db->escapeString($username));
     $db_user = $db->query($query)->fetchArray(SQLITE3_ASSOC);
+
+    // Pokud uživatel nebyl nalezen, můžeme rovnou skončit.
+    if (!$db_user) {
+        echo "<p><b>Neexistující uživatel</b></p>\n";
+        $db->close();
+        exit;
+    }
+    // V případě úspěchu dáme vědět hláškou
+    if (isset($_GET["success"])) {
+        $status = $_GET["success"];
+        if ($status == "1")
+            echo "<p><b>Údaje úspěšně změněny.</b></p>\n";
+        else
+            echo "<p><b>Chyba při změně údajů</p></b>\n";
+    }
 ?>
-<html>
-    <head>
-        <title>SportKlub úprava profilu</title>
-    </head>
-    <body>
-        <?php
-            // Pokud uživatel nebyl nalezen, můžeme rovnou skončit.
-            if (!$db_user) {
-                echo "<p><b>Neexistující uživatel</b></p>\n";
-                echo "    </body>\n</html>";
-                $db->close();
-                exit;
-            }
-            // V případě úspěchu dáme vědět hláškou
-            if (isset($_GET["success"]))
-                echo "<p><b>Údaje úspěšně změněny.</b></p>";
-        ?>
-        <a href="index.php">Zpět</a><br />
-        <form action="edit.php?user=<?php echo $username ?>" method="post" 
-                                            accept-charset="UTF-8">
-            <input type="hidden" value="1" name="editted" />
-            <label for="jmeno">Jméno:</label>
-            <input type="text" name="jmeno" 
-                             value="<?php echo $db_user['jmeno'] ?>" /><br />
-            <label for="prijmeni">Příjmení:</label>
-            <input type="text" name="prijmeni" 
-                             value="<?php echo $db_user['prijmeni'] ?>" /><br />
-            <label for="telCislo">Telefonní číslo:</label>
-            <input type="text" name="telCislo" 
-                             value="<?php echo $db_user['telCislo'] ?>" /><br />
+<form id="edit_form" class="form" action="edit.php?user=<?php echo $username ?>"
+                   method="post" accept-charset="UTF-8">
+    <input type="hidden" value="1" name="editted" />
+    <label for="jmeno">Jméno:</label>
+    <input class="field" type="text" name="jmeno" 
+                     value="<?php echo $db_user['jmeno'] ?>" /><br />
+    <label for="prijmeni">Příjmení:</label>
+    <input class="field" type="text" name="prijmeni" 
+                     value="<?php echo $db_user['prijmeni'] ?>" /><br />
+    <label for="telCislo">Telefonní číslo:</label>
+    <input class="field" type="text" name="telCislo" 
+                     value="<?php echo $db_user['telCislo'] ?>" /><br />
 
-            <label for="pass">Heslo:</label>
-            <input type="password" name="pass" /><br />
-            <label for="passcheck">Heslo podruhé:</label>
-            <input type="password" name="passcheck" /><br />
+    <label for="pass">Heslo:</label>
+    <input class="field" type="password" name="pass" /><br />
+    <label for="passcheck">Heslo podruhé:</label>
+    <input class="field" type="password" name="passcheck" /><br />
 
-            <input type="submit" name="submit" value="Změnit údaje" /><br />
-        </form>
-    </body>
-</html>
+    <input type="submit" name="submit" value="Změnit údaje" /><br />
+</form>
 
 <?php
 $db->close();

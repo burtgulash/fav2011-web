@@ -3,7 +3,6 @@ include_once "globals.php";
 
 $username = $_SESSION["username"];
 $perm = getPermissions();
-$dbfile = "data.db";
 
 // Pokud byl zaslán požadavek na přidání uživatele, přidáme ho do databáze.
 if (isset($_POST["newuser"])) {
@@ -11,22 +10,24 @@ if (isset($_POST["newuser"])) {
         !empty($_POST["name"]) && !empty($_POST["pass"])) 
     {
         $pass_hash = md5($_POST["pass"]);
-        $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
         $query = sprintf("SELECT 1 FROM users WHERE name='%s';",
                          $db->escapeString($_POST["name"]));
         $res = $db->query($query)->fetchArray(SQLITE3_ASSOC);
 
         // Pokud uživatel neexistuje, můžeme ho přidat.
         if (!$res) {
-            $query = sprintf("INSERT INTO users (name, pass, jmeno, prijmeni) 
-                                   VALUES ('%s', '%s', '%s', '%s');",
+            $query = sprintf("INSERT INTO users (name, pass, permissions, 
+                                                 jmeno, prijmeni) 
+                                   VALUES ('%s', '%s', %d, '%s', '%s');",
                              $db->escapeString($_POST["name"]),
                              $db->escapeString($pass_hash),
+                             MEMBER_PERMISSIONS,
                              $db->escapeString($_POST["jmeno"]),
                              $db->escapeString($_POST["prijmeni"]));
             $db->exec($query);
             $db->close();
-            relative_redirect("index.php?id=clenove");
+            relative_redirect("index.php?id=clenove&error=none");
         }
         $db->close();
 
@@ -40,7 +41,7 @@ if (isset($_GET["removeuser"])) {
     // Musíme se ujistit, že uživatel, který chce někoho odstranit má nejvyšší
     // práva a nemaže sebe.
     if ($perm >= HIGH_PERMISSIONS && $_GET["removeuser"] != $username) {
-        $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
         $query = sprintf("DELETE FROM users WHERE name='%s';", 
                          $db->escapeString($_GET["removeuser"]));
         $db->exec($query);
@@ -59,6 +60,9 @@ if (isset($_GET["error"])) {
     switch ($_GET["error"]) {
         case "exists":
             echo "<p><b>Uživatel již existuje.</b></p><br />\n";
+            break;
+        case "none":
+            echo "<p><b>Uživatel vytvořen</b></p><br />\n";
             break;
     }
 }
@@ -86,7 +90,7 @@ if ($perm >= HIGH_PERMISSIONS) {
 echo "<h1 class='section_title'>Členové týmu</h1>\n";
 
 // Vypíšeme všechny členy z databáze.
-$db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
+$db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
 $query = "SELECT name, jmeno, prijmeni, telCislo FROM users;";
 $result = $db->query($query);
 
@@ -100,10 +104,13 @@ while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
 "            Telefonní číslo: " . $user["telCislo"] . "<br />\n" .
 "            </p>\n";
     // don't delete yourself
-    if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username)
+    if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username) {
         echo "" .
+"            <a class='removelink' href='index.php?id=uprava&user=" .
+             $user["name"] . "'>upravit</a>\n" .
 "            <a class='removelink' href='clenove.php?removeuser=" . 
              $user["name"] . "'>odstranit</a><br />\n";
+    }
 
     echo "" .
 "            </div><br />\n";

@@ -1,7 +1,8 @@
 <?php
 include_once "globals.php";
 
-$newsdb = "data.db";
+define ("ARTICLES_PER_PAGE", 4);
+
 // Pokud byl zaslán požadavek na nový neprázdný příspěvek,
 // vložíme ho do databáze.
 if (isset($_POST["newpost"])) {
@@ -10,7 +11,7 @@ if (isset($_POST["newpost"])) {
         !empty($_POST["title"]) &&
         !empty($_POST["article"])) 
     {
-        $db = new SQLite3($newsdb, SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
         $query = sprintf("INSERT INTO news (title, article, timeEntered) VALUES
                                    ('%s', '%s', DATETIME('NOW'));",
                         $db->escapeString($_POST["title"]), 
@@ -28,7 +29,7 @@ if (!isset($fromIndex))
 echo "<h1 class='section_title'>Novinky</h1>\n";
 
 // Hlavní uživatel může přispívat nové zprávy, poskytneme mu k tomu formulář.
-if ($perm >= 2) {
+if ($perm >= HIGH_PERMISSIONS) {
 echo "".
 "        <div>\n" .
 "          <form id='article_form' class='form' action='uvod.php'" .
@@ -45,7 +46,7 @@ echo "".
 }
 
 // Získáme z databáze pět nejnovějších příspěvků a zobrazíme je.
-$db = new SQLite3($newsdb, SQLITE3_OPEN_READONLY);
+$db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
 
 $page = 0;
 if (isset($_GET["page"])) {
@@ -53,12 +54,11 @@ if (isset($_GET["page"])) {
     if ($num > 0)
         $page = $num;
 }
-$start = $page * 5;
-$end = $start + 5;
+$start = $page * ARTICLES_PER_PAGE;
 
 $query = "SELECT title, article, strftime('%H:%M, %d.%m.%Y', timeEntered)
-                   AS time FROM news 
-                   ORDER BY timeEntered DESC LIMIT ".$start.", ".$end.";";
+           AS time FROM news 
+           ORDER BY timeEntered DESC LIMIT ".$start.", ".ARTICLES_PER_PAGE.";";
 $result = $db->query($query);
 
 while($article = $result->fetchArray(SQLITE3_ASSOC)) {
@@ -84,7 +84,7 @@ if ($page > 0) {
 $query = "SELECT COUNT(title) FROM news";
 $result= $db->query($query)->fetchArray(SQLITE3_ASSOC);
 $numArticles = $result["COUNT(title)"];
-if ($numArticles > $end) {
+if ($numArticles > $start + ARTICLES_PER_PAGE) {
     $older = $page + 1;
     echo "<li>\n";
     echo "<a class='pagelink' href='index.php?page=$older'>starší</a>\n";

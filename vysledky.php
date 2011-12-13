@@ -2,12 +2,11 @@
 include_once "globals.php";
 
 $perm = getPermissions();
-$dbfile = "data.db";
 
 // Pokud byl zaslán požadavek na přidání nového zápasu, který má neprázdná data,
 // vložíme ho do databáze.
 if (isset($_POST["newmatch"])) {
-    if ($perm >= 2 && 
+    if ($perm >= HIGH_PERMISSIONS && 
         isset($_POST["proti"]) &&
         isset($_POST["my"]) &&
         isset($_POST["oni"]) &&
@@ -20,7 +19,7 @@ if (isset($_POST["newmatch"])) {
         if (isset($_POST["date"]))
             $date = $_POST["date"];
 
-        $db = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
+        $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
         $query = sprintf("INSERT INTO scores (opponent, ours, theirs, timePlayed) 
                         VALUES ('%s', '%s', '%s', JULIANDAY('%s'));", 
                         $db->escapeString($_POST["proti"]),
@@ -43,7 +42,7 @@ echo "<h1 class='section_title'>Odehrané zápasy</h1>\n";
 
 // Hlavní uživatel může vkládat nové odehrané zápasy, může k tomu použít 
 // formulář.
-if ($perm >= 2) {
+if ($perm >= HIGH_PERMISSIONS) {
     echo "" .
 "    <form id='score_form' class='form' method='post' action='vysledky.php'".
 "                                          accept-charset='UTF-8'>\n" .
@@ -77,12 +76,12 @@ if ($perm >= 2) {
     <tr>
         <th>datum</th>
         <th>proti</th>
-        <th>skóre</th>
+        <th>my : oni</th>
     </tr>
 
 <?php
 // Vypíšeme deset nejnovějších zápasů.
-$db = new SQLite3($dbfile, SQLITE3_OPEN_READONLY);
+$db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
 $query = "SELECT opponent, ours, theirs,
                  strftime('%d.%m.%Y',timePlayed) AS datePlayed 
                  FROM scores ORDER BY timePlayed DESC;";

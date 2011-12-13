@@ -4,6 +4,8 @@ define ("NO_PERMISSIONS", 0);
 define ("MEMBER_PERMISSIONS", 1);
 define ("HIGH_PERMISSIONS", 2);
 
+define ("DATABASE", "data.db");
+
 function relative_redirect($to)
 {
     $host = $_SERVER["HTTP_HOST"];

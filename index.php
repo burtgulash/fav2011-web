@@ -49,8 +49,7 @@ if ($auth)
                         // odhlášení. V opačném případě nabídneme odkaz na přihlášení.
                         if ($auth) {
                             echo "<li>\n";
-                            echo "<a id='header_username' href='edit.php?user=$username'>
-                                                         $username</a>\n";
+                            echo "<a id='header_username' href='index.php?id=uprava&user=$username'>$username</a>\n";
                             echo "</li><li>\n";
                             echo "<a href='index.php?logout=1'>odhlásit</a>";
                             echo "</li>\n";
@@ -66,7 +65,7 @@ if ($auth)
                         <li><a href="index.php?id=kontakt">kontakt</a></li>
                         <?php
                         // Pokud je uživatel přihlášen, nabídneme mu i členy týmu.
-                        if ($perm > 0)
+                        if ($perm > NO_PERMISSIONS)
                             echo '<li><a href="index.php?id=clenove">členové</a></li>';
                         ?>
                     </ul>
@@ -86,6 +85,9 @@ if ($auth)
                     case "login":
                         include('login.php');
                         break;
+                    case "uprava":
+                        include('edit.php');
+                        break;
                     case "kontakt": 
                         include('kontakt.php'); 
                         break;
@@ -93,7 +95,7 @@ if ($auth)
                         include('vysledky.php'); 
                         break;
                     case "clenove": 
-                        if ($perm > 0) {
+                        if ($perm > NO_PERMISSIONS) {
                             include('clenove.php'); 
                             break;
                         }
