@@ -50,7 +50,7 @@ if ($auth)
     if ($auth) {
         echo "<li>\n";
         echo "<a id='header_username' 
-href='index.php&amp;id=uprava&amp;user=$username'>$username</a>\n";
+href='index.php?id=uprava&amp;user=$username'>$username</a>\n";
         echo "</li><li>\n";
         echo "<a href='index.php?logout=1'>odhlásit</a>";
         echo "</li>\n";
