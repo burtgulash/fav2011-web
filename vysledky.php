@@ -43,7 +43,7 @@ echo "<h1 class='section_title'>Odehrané zápasy</h1>\n";
 // Hlavní uživatel může vkládat nové odehrané zápasy, může k tomu použít 
 // formulář.
 if ($perm >= HIGH_PERMISSIONS) {
-	$date = date("Y-m-d");
+    $date = date("Y-m-d");
     echo "
     <form id='score_form' class='form' method='post' action='vysledky.php'
                                           accept-charset='UTF-8'>

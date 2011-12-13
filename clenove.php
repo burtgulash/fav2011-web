@@ -95,18 +95,23 @@ echo "<h1 class='section_title'>Členové týmu</h1>\n";
 
 // Vypíšeme všechny členy z databáze.
 $db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
-$query = "SELECT name, jmeno, prijmeni, telCislo FROM users;";
+$query = "SELECT name, jmeno, prijmeni, telCislo, mesto FROM users;";
 $result = $db->query($query);
 
+// Postupně vypsat všechny uživatele a jejich údaje.
 while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
-    echo "" .
-"        <div class='user'>\n" .
-"            <span class='m_username'>" . $user["name"] . "</span><br />\n" .
-"            <p class='m_info'>\n" .
-"            Jméno: " . $user["jmeno"] . "<br />\n" .
-"            Příjmení: " . $user["prijmeni"] . "<br />\n" .
-"            Telefonní číslo: " . $user["telCislo"] . "<br />\n" .
-"            </p>\n";
+    echo "
+        <div class='user'>
+            <span class='m_username'>" . $user["name"] . "</span><br />
+            <p class='m_info'>
+                Jméno: " . $user["jmeno"] . "<br />
+                Příjmení: " . $user["prijmeni"] . "<br />";
+    if (!empty($user["telCislo"]))
+        echo "Telefonní číslo: " . $user["telCislo"] . "<br />";
+    if (!empty($user["mesto"]))
+        echo "Město: " . $user["mesto"] . "<br />";
+    echo "</p>";
+
     // don't delete yourself
     if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username) {
         echo "

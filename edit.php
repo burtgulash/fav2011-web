@@ -40,25 +40,27 @@
                 $successful_update = false;
         }
 
-		$jmeno = trim($_POST["jmeno"]);
-		$prijmeni = trim($_POST["prijmeni"]);
-		$telCislo = trim($_POST["telCislo"]);
+        $jmeno = trim($_POST["jmeno"]);
+        $prijmeni = trim($_POST["prijmeni"]);
+        $telCislo = trim($_POST["telCislo"]);
+        $mesto = trim($_POST["mesto"]);
 
-		// Jméno a Příjmení musí být neprázdné
-		if (empty($jmeno) || empty($prijmeni))
-			$successful_update = false;
+        // Jméno a Příjmení musí být neprázdné
+        if (empty($jmeno) || empty($prijmeni))
+            $successful_update = false;
 
-		// Pokud došlo k chybě, nebudeme upravovat uživatele
+        // Pokud došlo k chybě, nebudeme upravovat uživatele
         if ($successful_update) {
             $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
 
             // Dotaz na změnu údajů a jeho vykonání
             $query = sprintf("UPDATE users SET jmeno='%s', prijmeni='%s',
-                              telCislo='%s'" . $pass_update .
+                              telCislo='%s', mesto='%s'" . $pass_update .
                               "WHERE name='%s';", 
                               $db->escapeString($jmeno),
                               $db->escapeString($prijmeni),
                               $db->escapeString($telCislo),
+                              $db->escapeString($mesto),
                               $db->escapeString($_GET["user"]));
             if (!($db->exec($query)))
                 $successful_update = false;
@@ -82,12 +84,12 @@
 
     // Dotaz k vyhledání uživatele v databázi
     $db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
-    $query = sprintf("SELECT jmeno, prijmeni, telCislo FROM users
+    $query = sprintf("SELECT jmeno, prijmeni, telCislo, mesto FROM users
                        WHERE name='%s';", $db->escapeString($username));
     $db_user = $db->query($query)->fetchArray(SQLITE3_ASSOC);
 
     // Pokud uživatel nebyl nalezen, můžeme rovnou skončit.
-	// Tento případ by neměl nikdy nastat.
+    // Tento případ by neměl nikdy nastat.
     if (!$db_user) {
         echo "<p><b>Neexistující uživatel</b></p>\n";
         $db->close();
@@ -115,7 +117,12 @@
     <label for="telCislo">Telefonní číslo:</label>
     <input class="field" type="text" name="telCislo" 
                      value="<?php echo $db_user['telCislo'] ?>" /><br />
+    <label for="mesto">Město:</label>
+    <input class="field" type="text" name="mesto" 
+                     value="<?php echo $db_user['mesto'] ?>" /><br />
 
+    <br />
+    <br />
     <label for="pass">Heslo:</label>
     <input class="field" type="password" name="pass" /><br />
     <label for="passcheck">Heslo podruhé:</label>

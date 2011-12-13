@@ -7,20 +7,21 @@ dbfile=data.db
 #users table
 sqlite3 $dbfile "CREATE TABLE users (id INTEGER PRIMARY KEY, 
                      name TEXT, pass CHARACTER(32), permissions INT,
-                     jmeno TEXT, prijmeni TEXT, telCislo TEXT);"
+                     jmeno TEXT, prijmeni TEXT, telCislo TEXT, mesto TEXT);"
 
 sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni, 
-                                                                      telCislo) 
+                                               telCislo, mesto) 
                   values ('honza', 'd9479746ea51a4177f8bc092c5db7b8d', 1,
-                           'Jan', 'Borůvka', '1234732');"
+                           'Jan', 'Borůvka', '1234732', 'Pragl');"
 
 sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni) 
                   values ('pepa', '281ffbf5eb2a3916b9c1eb8f28637836', 1,
                            'Josef', 'Bro');"
 
-sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni) 
+sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni,
+                                            mesto) 
                   values ('prizdisrac', 'b876ad7de4b292d3ba250d5686a6f160', 2,
-                           'Bebi', 'Bro');"
+                           'Bebi', 'Bro', 'Plzne');"
 
 # news table
 sqlite3 $dbfile "CREATE TABLE news (id INTEGER PRIMARY KEY, 
