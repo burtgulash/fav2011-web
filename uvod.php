@@ -39,8 +39,7 @@ method='post' accept-charset='UTF-8'>
             <input class='field' type='text' name='title' required='required'/>
             <br />
             <textarea name='article' cols='40' rows='5'></textarea>
-            <input type='submit' name='submit' value='Nový příspěvek' 
-required='required' />
+            <input type='submit' name='submit' value='Nový příspěvek' />
             <br />
         </form>
        </div>

@@ -44,18 +44,19 @@ if ($auth)
 
                 <div id="header_login">
                     <ul>
-                    <?php
-                        // Pokud je uživatel přihlášen, zobrazit jeho jméno a odkaz na
-                        // odhlášení. V opačném případě nabídneme odkaz na přihlášení.
-                        if ($auth) {
-                            echo "<li>\n";
-                            echo "<a id='header_username' href='index.php?id=uprava&user=$username'>$username</a>\n";
-                            echo "</li><li>\n";
-                            echo "<a href='index.php?logout=1'>odhlásit</a>";
-                            echo "</li>\n";
-                        } else
-                            echo "<li><a href='index.php?id=login'>přihlásit</a></li>";
-                    ?>
+<?php
+    // Pokud je uživatel přihlášen, zobrazit jeho jméno a odkaz na
+    // odhlášení. V opačném případě nabídneme odkaz na přihlášení.
+    if ($auth) {
+        echo "<li>\n";
+        echo "<a id='header_username' 
+href='index.php&amp;id=uprava&amp;user=$username'>$username</a>\n";
+        echo "</li><li>\n";
+        echo "<a href='index.php?logout=1'>odhlásit</a>";
+        echo "</li>\n";
+    } else
+        echo "<li><a href='index.php?id=login'>přihlásit</a></li>";
+?>
                     </ul>
                 </div>
 

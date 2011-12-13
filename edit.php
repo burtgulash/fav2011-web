@@ -108,24 +108,24 @@
 <form id="edit_form" class="form" action="edit.php?user=<?php echo $username ?>"
                    method="post" accept-charset="UTF-8">
     <input type="hidden" value="1" name="editted" />
-    <label for="jmeno">Jméno:</label>
+    <label>Jméno:</label>
     <input class="field" type="text" name="jmeno" 
                      value="<?php echo $db_user['jmeno'] ?>" /><br />
-    <label for="prijmeni">Příjmení:</label>
+    <label>Příjmení:</label>
     <input class="field" type="text" name="prijmeni" 
                      value="<?php echo $db_user['prijmeni'] ?>" /><br />
-    <label for="telCislo">Telefonní číslo:</label>
+    <label>Telefonní číslo:</label>
     <input class="field" type="text" name="telCislo" 
                      value="<?php echo $db_user['telCislo'] ?>" /><br />
-    <label for="mesto">Město:</label>
+    <label>Město:</label>
     <input class="field" type="text" name="mesto" 
                      value="<?php echo $db_user['mesto'] ?>" /><br />
 
     <br />
     <br />
-    <label for="pass">Heslo:</label>
+    <label>Heslo:</label>
     <input class="field" type="password" name="pass" /><br />
-    <label for="passcheck">Heslo podruhé:</label>
+    <label>Heslo podruhé:</label>
     <input class="field" type="password" name="passcheck" /><br />
 
     <input type="submit" name="submit" value="Změnit údaje" /><br />

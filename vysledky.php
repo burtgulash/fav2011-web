@@ -49,26 +49,26 @@ if ($perm >= HIGH_PERMISSIONS) {
                                           accept-charset='UTF-8'>
         <h1>Nový zápas</h1>
         <input name='newmatch' type='hidden' value='1' />
-        <label for='proti'>
+        <label>
             Proti:
             <span>Tým protivníka</span>
         </label>
         <input class='field' name='proti' type='text' required='required' />
-        <label for='my'>
+        <label>
             My:
             <span>Naše skóre</span>
         </label>
         <input class='field' name='my' type='number' min='0' step='1'
                    value='0' required='required' />
         <br />
-        <label for='oni'>
+        <label>
             oni:
             <span>Jejich skóre</span>
         </label>
         <input class='field' name='oni' type='number' min='0' step='1' 
                    value='0' required='required' />
         <br />
-        <label for='date'>
+        <label>
             Datum zápasu:
              <span>9999-12-31</span>
          </label>

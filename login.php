@@ -84,10 +84,10 @@ if (isset($_GET["username"]))
 <form class="form" id="login_form" action="login.php" 
                                        method="post" accept-charset="UTF-8">
     <input type="hidden" name="submitted" value="1" />
-    <label for="username">Jméno:</label>
+    <label>Jméno:</label>
     <input class="field" maxlength="50" name="username" type="text" 
                value="<?php echo $name_entered?>" required="required" />
-    <label for="pass">Heslo:</label>
+    <label>Heslo:</label>
     <input class="field" maxlength="50" name="pass" type="password" 
                                                   required="required"/>
     <input type="submit" value="Přihlásit se" />

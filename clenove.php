@@ -74,16 +74,16 @@ if ($perm >= HIGH_PERMISSIONS) {
 action='clenove.php' accept-charset='UTF-8'>
         <h1>Nový uživatel</h1>
         <input name='newuser' type='hidden' value='1' />
-        <label for='name'>Uživatelské jméno:</label>
+        <label>Uživatelské jméno:</label>
         <input class='field' name='name' type='text' required='required'/>
         <br />
-        <label for='pass'>Heslo:</label>
+        <label>Heslo:</label>
         <input class='field' name='pass' type='password' required='required'/>
         <br />
-        <label for='jmeno'>Jméno:</label>
+        <label>Jméno:</label>
         <input class='field' name='jmeno' type='text' required='required'/>
         <br />
-        <label for='prijmeni'>Příjmení:</label>
+        <label>Příjmení:</label>
         <input class='field' name='prijmeni' type='text' required='required' />
         <br />
         <input type='submit' name='submit' value='Přidat uživatele'/>
