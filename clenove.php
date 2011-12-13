@@ -115,9 +115,9 @@ while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
     // don't delete yourself
     if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username) {
         echo "
-            <a class='removelink' href='index.php?id=uprava&user=" .
+            <a class='removelink' href='index.php?amp;id=uprava&user=" .
              $user["name"] . "'>upravit</a>
-            <a class='removelink' href='clenove.php?removeuser=" . 
+            <a class='removelink' href='clenove.php?amp;removeuser=" . 
              $user["name"] . "'>odstranit</a><br />\n";
     }
 
