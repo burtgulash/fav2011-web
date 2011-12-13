@@ -86,8 +86,9 @@ if (isset($_GET["username"]))
     <input type="hidden" name="submitted" value="1" />
     <label for="username">Jméno:</label>
     <input class="field" maxlength="50" name="username" type="text" 
-               value="<?php echo $name_entered?>"/>
+               value="<?php echo $name_entered?>" required="required" />
     <label for="pass">Heslo:</label>
-    <input class="field" maxlength="50" name="pass" type="password" />
+    <input class="field" maxlength="50" name="pass" type="password" 
+                                                  required="required"/>
     <input type="submit" value="Přihlásit se" />
 </form>

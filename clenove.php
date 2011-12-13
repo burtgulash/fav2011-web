@@ -69,22 +69,26 @@ if (isset($_GET["error"])) {
 
 // Hlavní uživatel může vkládat nové členy, může k tomu použít formulář.
 if ($perm >= HIGH_PERMISSIONS) {
-    echo "" .
-"    <form id='member_form' class='form' method='post'" .
-"                         action='clenove.php' accept-charset='UTF-8'>\n" .
-"        <h1>Nový uživatel</h1>\n" .
-"        <input name='newuser' type='hidden' value='1' />\n" .
-"        <label for='name'>Uživatelské jméno:</label>\n" .
-"        <input class='field' name='name' type='text' /><br />\n" .
-"        <label for='pass'>Heslo:</label>\n" .
-"        <input class='field' name='pass' type='password' /><br />\n" .
-"        <label for='jmeno'>Jméno:</label>\n" .
-"        <input class='field' name='jmeno' type='text' /><br />\n" .
-"        <label for='prijmeni'>Příjmení:</label>\n" .
-"        <input class='field' name='prijmeni' type='text' /><br />\n" .
-"        <input type='submit' name='submit' value='Přidat uživatele'/>\n" .
-"    </form>\n" .
-"    <br />\n";
+    echo "
+    <form id='member_form' class='form' method='post'
+action='clenove.php' accept-charset='UTF-8'>
+        <h1>Nový uživatel</h1>
+        <input name='newuser' type='hidden' value='1' />
+        <label for='name'>Uživatelské jméno:</label>
+        <input class='field' name='name' type='text' required='required'/>
+        <br />
+        <label for='pass'>Heslo:</label>
+        <input class='field' name='pass' type='password' required='required'/>
+        <br />
+        <label for='jmeno'>Jméno:</label>
+        <input class='field' name='jmeno' type='text' required='required'/>
+        <br />
+        <label for='prijmeni'>Příjmení:</label>
+        <input class='field' name='prijmeni' type='text' required='required' />
+        <br />
+        <input type='submit' name='submit' value='Přidat uživatele'/>
+    </form>
+    <br />";
 }
 
 echo "<h1 class='section_title'>Členové týmu</h1>\n";
@@ -105,10 +109,10 @@ while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
 "            </p>\n";
     // don't delete yourself
     if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username) {
-        echo "" .
-"            <a class='removelink' href='index.php?id=uprava&user=" .
-             $user["name"] . "'>upravit</a>\n" .
-"            <a class='removelink' href='clenove.php?removeuser=" . 
+        echo "
+            <a class='removelink' href='index.php?id=uprava&user=" .
+             $user["name"] . "'>upravit</a>
+            <a class='removelink' href='clenove.php?removeuser=" . 
              $user["name"] . "'>odstranit</a><br />\n";
     }
 

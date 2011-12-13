@@ -40,6 +40,15 @@
                 $successful_update = false;
         }
 
+		$jmeno = trim($_POST["jmeno"]);
+		$prijmeni = trim($_POST["prijmeni"]);
+		$telCislo = trim($_POST["telCislo"]);
+
+		// Jméno a Příjmení musí být neprázdné
+		if (empty($jmeno) || empty($prijmeni))
+			$successful_update = false;
+
+		// Pokud došlo k chybě, nebudeme upravovat uživatele
         if ($successful_update) {
             $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
 
@@ -47,9 +56,9 @@
             $query = sprintf("UPDATE users SET jmeno='%s', prijmeni='%s',
                               telCislo='%s'" . $pass_update .
                               "WHERE name='%s';", 
-                              $db->escapeString($_POST["jmeno"]),
-                              $db->escapeString($_POST["prijmeni"]),
-                              $db->escapeString($_POST["telCislo"]),
+                              $db->escapeString($jmeno),
+                              $db->escapeString($prijmeni),
+                              $db->escapeString($telCislo),
                               $db->escapeString($_GET["user"]));
             if (!($db->exec($query)))
                 $successful_update = false;
@@ -78,6 +87,7 @@
     $db_user = $db->query($query)->fetchArray(SQLITE3_ASSOC);
 
     // Pokud uživatel nebyl nalezen, můžeme rovnou skončit.
+	// Tento případ by neměl nikdy nastat.
     if (!$db_user) {
         echo "<p><b>Neexistující uživatel</b></p>\n";
         $db->close();
@@ -92,6 +102,7 @@
             echo "<p><b>Chyba při změně údajů</p></b>\n";
     }
 ?>
+
 <form id="edit_form" class="form" action="edit.php?user=<?php echo $username ?>"
                    method="post" accept-charset="UTF-8">
     <input type="hidden" value="1" name="editted" />

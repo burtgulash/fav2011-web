@@ -30,19 +30,21 @@ echo "<h1 class='section_title'>Novinky</h1>\n";
 
 // Hlavní uživatel může přispívat nové zprávy, poskytneme mu k tomu formulář.
 if ($perm >= HIGH_PERMISSIONS) {
-echo "".
-"        <div>\n" .
-"          <form id='article_form' class='form' action='uvod.php'" .
-"                              method='post' accept-charset='UTF-8'>\n" .
-"            <h1>Nová zpráva</h1>\n" .
-"            <input type='hidden' name='newpost' value='1' />\n" .
-"            <input class='field' type='text' name='title' /><br />\n" .
-"            <textarea name='article' cols='40' rows='5'></textarea>\n" .
-"            <input type='submit' name='submit' value='Nový příspěvek' />" .
-"            <br />\n" .
-"        </form>\n" .
-"       </div>\n" .
-"       <br />\n";
+echo "
+        <div>
+          <form id='article_form' class='form' action='uvod.php'
+method='post' accept-charset='UTF-8'>
+            <h1>Nová zpráva</h1>
+            <input type='hidden' name='newpost' value='1' />
+            <input class='field' type='text' name='title' required='required'/>
+            <br />
+            <textarea name='article' cols='40' rows='5'></textarea>
+            <input type='submit' name='submit' value='Nový příspěvek' 
+required='required' />
+            <br />
+        </form>
+       </div>
+       <br />";
 }
 
 // Získáme z databáze pět nejnovějších příspěvků a zobrazíme je.
@@ -76,7 +78,7 @@ echo "<ul>\n";
 if ($page > 0) {
     $newer = $page - 1;
     echo "<li>\n";
-    echo "<a class='pagelink' href='index.php?page=$newer'>novější</a>\n";
+    echo "    <a class='pagelink' href='index.php?page=$newer'>novější</a>\n";
     echo "</li>\n";
 }
 
@@ -87,7 +89,7 @@ $numArticles = $result["COUNT(title)"];
 if ($numArticles > $start + ARTICLES_PER_PAGE) {
     $older = $page + 1;
     echo "<li>\n";
-    echo "<a class='pagelink' href='index.php?page=$older'>starší</a>\n";
+    echo "    <a class='pagelink' href='index.php?page=$older'>starší</a>\n";
     echo "</li>\n";
 }
 echo "</ul>\n";

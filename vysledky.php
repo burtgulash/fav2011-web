@@ -43,33 +43,38 @@ echo "<h1 class='section_title'>Odehrané zápasy</h1>\n";
 // Hlavní uživatel může vkládat nové odehrané zápasy, může k tomu použít 
 // formulář.
 if ($perm >= HIGH_PERMISSIONS) {
-    echo "" .
-"    <form id='score_form' class='form' method='post' action='vysledky.php'".
-"                                          accept-charset='UTF-8'>\n" .
-"        <h1>Nový zápas</h1>\n" .
-"        <input name='newmatch' type='hidden' value='1' />\n" .
-"        <label for='proti'>\n".
-"            Proti:\n" .
-"            <span>Tým protivníka</span>" .
-"        </label>\n" .
-"        <input class='field' name='proti' type='text' />\n" .
-"        <label for='my'>\n" .
-"            My:\n" .
-"            <span>Naše skóre</span>\n" .
-"        </label>\n" .
-"        <input class='field' name='my' type='text' /><br />\n" .
-"        <label for='oni'>\n" .
-"            oni:\n" .
-"            <span>Jejich skóre</span>\n" .
-"        </label>\n" .
-"        <input class='field' name='oni' type='text' /><br />\n" .
-"        <label for='date'>" .
-"            Datum zápasu:" .
-"             <span>9999-12-31</span>\n" .
-"         </label>\n" .
-"        <input class='field' name='date' type='date' /><br />\n" .
-"        <input type='submit' name='submit' value='vložit' /><br />\n" .
-"    </form>";
+	$date = date("Y-m-d");
+    echo "
+    <form id='score_form' class='form' method='post' action='vysledky.php'
+                                          accept-charset='UTF-8'>
+        <h1>Nový zápas</h1>
+        <input name='newmatch' type='hidden' value='1' />
+        <label for='proti'>
+            Proti:
+            <span>Tým protivníka</span>
+        </label>
+        <input class='field' name='proti' type='text' required='required' />
+        <label for='my'>
+            My:
+            <span>Naše skóre</span>
+        </label>
+        <input class='field' name='my' type='number' min='0' step='1'
+                   value='0' required='required' />
+        <br />
+        <label for='oni'>
+            oni:
+            <span>Jejich skóre</span>
+        </label>
+        <input class='field' name='oni' type='number' min='0' step='1' 
+                   value='0' required='required' />
+        <br />
+        <label for='date'>
+            Datum zápasu:
+             <span>9999-12-31</span>
+         </label>
+        <input class='field' name='date' type='date' value='$date'/><br />
+        <input type='submit' name='submit' value='vložit' /><br />
+    </form>";
 }
 ?>
 <table id="vysledky">
