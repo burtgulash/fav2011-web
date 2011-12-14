@@ -6,26 +6,26 @@ $perm = get_permissions();
 // Pokud byl zaslán požadavek na přidání nového zápasu, který má neprázdná data,
 // vložíme ho do databáze.
 if (isset($_POST["newmatch"]) && $perm >= HIGH_PERMISSIONS) {
-	$proti =  trim($_POST["proti"]);
-	var_dump($_POST["my"]);
-	$my = (int) $_POST["my"];
-	$oni = (int) $_POST["oni"];
+    $proti =  trim($_POST["proti"]);
+    var_dump($_POST["my"]);
+    $my = (int) $_POST["my"];
+    $oni = (int) $_POST["oni"];
 
-	if (!empty($proti)) {
-		// Pokud nebyl zadán datum zápasu, použijeme momentální čas.
-		$date = "NOW";
-		if (isset($_POST["date"]))
-			$date = $_POST["date"];
+    if (!empty($proti)) {
+        // Pokud nebyl zadán datum zápasu, použijeme momentální čas.
+        $date = "NOW";
+        if (isset($_POST["date"]))
+            $date = $_POST["date"];
 
-		$db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
-		$query = sprintf("INSERT INTO scores (opponent, ours, theirs, 
+        $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
+        $query = sprintf("INSERT INTO scores (opponent, ours, theirs, 
                       timePlayed) VALUES ('%s', '%d', '%d', JULIANDAY('%s'));",
-						$db->escapeString($proti),
-						$my, $oni,
-						$db->escapeString($date));
-		$db->exec($query);
-		$db->close();
-	}
+                        $db->escapeString($proti),
+                        $my, $oni,
+                        $db->escapeString($date));
+        $db->exec($query);
+        $db->close();
+    }
     relative_redirect("index.php?id=vysledky");
 }
 

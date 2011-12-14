@@ -64,9 +64,9 @@ if (isset($_GET["status"])) {
         case "added":
             echo "<p><b>Uživatel vytvořen</b></p><br />\n";
             break;
-		case "removed":
+        case "removed":
             echo "<p><b>Uživatel odstraněn</b></p><br />\n";
-			break;
+            break;
     }
 }
 
@@ -99,7 +99,7 @@ echo "<h1 class='section_title'>Členové týmu</h1>\n";
 // Vypíšeme všechny členy z databáze.
 $db = new SQLite3(DATABASE, SQLITE3_OPEN_READONLY);
 $query = "SELECT name, jmeno, prijmeni, telCislo, mesto FROM users
-          ORDER BY permissions DESC;";
+          ORDER BY permissions DESC, name ASC;";
 $result = $db->query($query);
 
 // Postupně vypsat všechny uživatele a jejich údaje.
