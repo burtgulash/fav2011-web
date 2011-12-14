@@ -1,38 +1,35 @@
 <?php
 include_once "globals.php";
 
-$perm = getPermissions();
+$perm = get_permissions();
 
 // Pokud byl zaslán požadavek na přidání nového zápasu, který má neprázdná data,
 // vložíme ho do databáze.
-if (isset($_POST["newmatch"])) {
-    if ($perm >= HIGH_PERMISSIONS && 
-        isset($_POST["proti"]) &&
-        isset($_POST["my"]) &&
-        isset($_POST["oni"]) &&
-        !empty($_POST["proti"]) &&
-        !empty($_POST["my"]) &&
-        !empty($_POST["oni"]))
-    {
-        // Pokud nebyl zadán datum zápasu, použijeme momentální čas.
-        $date = "NOW";
-        if (isset($_POST["date"]))
-            $date = $_POST["date"];
+if (isset($_POST["newmatch"]) && $perm >= HIGH_PERMISSIONS) {
+	$proti =  trim($_POST["proti"]);
+	var_dump($_POST["my"]);
+	$my = (int) $_POST["my"];
+	$oni = (int) $_POST["oni"];
 
-        $db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
-        $query = sprintf("INSERT INTO scores (opponent, ours, theirs, timePlayed) 
-                        VALUES ('%s', '%s', '%s', JULIANDAY('%s'));", 
-                        $db->escapeString($_POST["proti"]),
-                        $db->escapeString($_POST["my"]),
-                        $db->escapeString($_POST["oni"]),
-                        $db->escapeString($date));
-        $db->exec($query);
+	if (!empty($proti)) {
+		// Pokud nebyl zadán datum zápasu, použijeme momentální čas.
+		$date = "NOW";
+		if (isset($_POST["date"]))
+			$date = $_POST["date"];
 
-        $db->close();
-    }
-
+		$db = new SQLite3(DATABASE, SQLITE3_OPEN_READWRITE);
+		$query = sprintf("INSERT INTO scores (opponent, ours, theirs, 
+                      timePlayed) VALUES ('%s', '%d', '%d', JULIANDAY('%s'));",
+						$db->escapeString($proti),
+						$my, $oni,
+						$db->escapeString($date));
+		$db->exec($query);
+		$db->close();
+	}
     relative_redirect("index.php?id=vysledky");
 }
+
+
 // Pokud se někdo na tuto stránku dostal jinak, přesměrujeme ho správně.
 if (!isset($fromIndex))
     relative_redirect("index.php?id=vysledky");

@@ -21,7 +21,7 @@ if (isset($_GET["logout"]))
 
 // Získat přístupová práva uživatele a údaje, jestli je přihlášen. Pokud ano,
 // uložíme si jeho uživatelské jméno.
-$perm = getPermissions();
+$perm = get_permissions();
 $auth = isset($_SESSION["username"]);
 if ($auth)
     $username = $_SESSION["username"];

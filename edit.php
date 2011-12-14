@@ -11,7 +11,7 @@
         relative_redirect("index.php");
 
     $username = $_GET["user"];
-    $perm = getPermissions();
+    $perm = get_permissions();
 
     // Pokud není uživatel přihlášen nebo pokud nemá dostatečná oprávnění
     // k úpravě profilu, přesměrujeme ho na úvodní stránku.
