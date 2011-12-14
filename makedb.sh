@@ -30,6 +30,11 @@ sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni,
 
 sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni,
                                telCislo, mesto) 
+                  values ('marek', 'e061c9aea5026301e7b3ff09e9aca2cf', 1,
+                           'Marek', 'Eden', '123-454-321', 'Praha');"
+
+sqlite3 $dbfile "INSERT INTO users (name, pass, permissions, jmeno, prijmeni,
+                               telCislo, mesto) 
                   values ('tonik', 'bb762d660de946e8eabd0865a17d5333', 1,
                            'Toníček', 'Sousedovic', '000-010-000', 'Kroměříž');"
 
@@ -77,7 +82,7 @@ zajistí nejlepší možnou obranu.',
 sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
                            ('Pepa jde do útoku', 
                             'Pepa bude ode dneška útočník.',
-                             JULIANDAY('2011-28-03'));"
+                             JULIANDAY('2011-03-28'));"
 
 sqlite3 $dbfile "INSERT INTO news (title, article, timeEntered) values
                            ('Honza si zlomil palec', 'Proto bude hrát v bráně.',
@@ -94,7 +99,13 @@ sqlite3 $dbfile "INSERT INTO scores (opponent, ours, theirs, timePlayed)
                         values ('Oponenté', '5', '3', JULIANDAY('2011-01-08'));"
 
 sqlite3 $dbfile "INSERT INTO scores (opponent, ours, theirs, timePlayed) 
+                        values ('Tučňáci', '0', '2', JULIANDAY('2010-08-02'));"
+
+sqlite3 $dbfile "INSERT INTO scores (opponent, ours, theirs, timePlayed) 
                         values ('Horníci', '0', '1', JULIANDAY('2010-03-27'));"
+
+sqlite3 $dbfile "INSERT INTO scores (opponent, ours, theirs, timePlayed) 
+                        values ('Makáči', '1', '2', JULIANDAY('2009-08-02'));"
 
 sqlite3 $dbfile "INSERT INTO scores (opponent, ours, theirs, timePlayed) 
                         values ('Dědkové', '1', '8', JULIANDAY('2009-08-05'));"

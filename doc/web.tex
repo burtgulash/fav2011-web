@@ -16,8 +16,9 @@
 
 \section{Použité technologie}
 \subsection{html}
-Použití html je jedním z povinných požadavků práce. Použitá verze je HTML4, 
-některé prvky (pouze několik) jsou podporovány až verzí HTML5.
+Použití html je jedním z povinných požadavků práce. Použitá verze je HTML4,
+některé prvky (pouze několik) jsou podporovány až verzí HTML5. Dynamicky
+vygenerované stránky jsou HTML5 validní.
 
 \subsection{css}
 Vzhled webových stránek je celkem jednoduchý, ale přehledný. Nemá problém se
@@ -61,7 +62,7 @@ dojde ke zkontrolování povolení k přístupu, proto není možné, aby někdo
 manipuloval s cizími daty. Samozřejmě za předpokladu, že vše funguje tak jak
 má, což obecně není jednoduchá záležitost.
 
-Kontrola údajů zadaných pomocí formuláře je kontrolována i na straně klienta,
+Kontrola údajů zadaných pomocí formuláře probíhá i na straně klienta,
 ale hlavní kontrola je samozřejmě ta na straně serveru. Ta však dává upozornění
 pouze v těch případech, kdy nebylo možné provést kontrolu u klienta. To je
 například při vkládání uživatele, jestli již takový existuje.
@@ -94,16 +95,30 @@ potřeba. Databáze je uložena v souboru $data.db$ rovněž v kořenovém adres
 
 \subsection{architektura}
 Rozvržení stránek bylo zvoleno tak, aby co nejvíce šetřilo zdrojovým kódem
-a bylo tedy co nejjednodušší v při jakýchkoliv případných změnách. Uživatel je
-vždy přítomen na stránce $index.php$, obsah je vždy dynamicky vygenerován
+a bylo tedy co nejjednodušší při jakýchkoliv případných změnách. Uživatel je
+vždy přítomen na stránce $index.php$, obsah je pouze dynamicky vygenerován
 podle GET parametru $id$. Toto rozvržení umožňuje ponechat zdrojový kód horního
 a dolního panelu stejný a pouze měnit obsah.
 
-Každá stránka obsahující obsah má vždy dva účely (s vyjímkou stránky
-$kontakt.php$, která je víceméně pouze statického charakteru. Prvním účelem je
-zobrazit obsah tak, jak ho získáme z databáze. Druhý účel zajišťuje logiku celé
-stránky. Tedy zajišťuje vyhodnocování formuláře té stejné stránky. V případě
-úspěchu při vyhodnocování formuláře přesměruje uživatele na stejnou stránku,
-ale tak, aby se pouze zobrazil obsah. Tento styl je poměrně hojně využívaný,
-protože umožňuje ponechat logiku i obsah jedné stránky v jednom souboru.
+Každá stránka s obsahem má vždy dva účely (s vyjímkou stránky $kontakt.php$,
+která je víceméně pouze statického charakteru. Prvním účelem je zobrazit obsah
+tak, jak ho získáme z databáze. Druhý účel zajišťuje logiku celé stránky. Tedy
+zajišťuje vyhodnocování formuláře té stejné stránky. V případě úspěchu při
+vyhodnocování formuláře přesměruje uživatele na stejnou stránku, ale tak, aby
+se pouze zobrazil obsah. Tento styl je poměrně hojně využívaný, protože
+umožňuje ponechat logiku i obsah jedné stránky v jednom souboru.
+
+\section{uživatelská příručka}
+Stránky obsahují kategorie úvod, výsledky, kontakt a pro přihlášené uživatele
+sekci členové. Na úvodní stránku se dostaneme kliknutím na nadpis \uv{Kopáči}.
+K úpravě profilu se dostaneme kliknutím uživatelské jméno, v případě, že jsme
+přihlášeni. Bude nám poskytnut formulář ke změně údajů a hesla. Pokud nechceme
+měnit heslo, stačí ho nevyplňovat. Zbytek stránek je víceméně intuitivní.
+
+\section{závěr}
+Práce byla úspěšně otestována v prohlížečích Mozilla Firefox 8.0 a Chromium
+15.0.  Při tvorbě webových stránek jsem se naučil používat jazyk php pro
+dynamické generování obsahu na straně serveru a manipulaci s relačními
+databázemi pomocí jazyka SQL. Svoji znalost jazyka markovacího html jsem
+rozšířil o nové prvky z HTML5.
 \end{document}

@@ -57,7 +57,7 @@ if (isset($_GET["page"])) {
 }
 $start = $page * ARTICLES_PER_PAGE;
 
-$query = "SELECT title, article, strftime('%H:%M, %d.%m.%Y', timeEntered)
+$query = "SELECT title, article, strftime('%d.%m.%Y', timeEntered)
            AS time FROM news 
            ORDER BY timeEntered DESC LIMIT ".$start.", ".ARTICLES_PER_PAGE.";";
 $result = $db->query($query);
