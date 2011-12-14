@@ -8,6 +8,15 @@ if (!isset($fromIndex))
 ?>
 
 <h1 class="section_title">Kontakt</h1>
-Fodbalový klup <b>Kopalisté</b>.
-Najdete nás na kopacím hřišti ve Sportovní 5, Praha 5.
-Trenér týmu je Honza Bonza, tel.: 632421643.
+<p><b>Fotbalový klub Kopáči</b></p>
+
+<p>
+Najdete nás na sportovním hřišti ve Sportovní 5, Praha 5.  Jsme tým s
+několikaletou zkušeností a střeleckou zručností. Vyhráváme za jakýchkoliv
+okolností, za jakéhokoliv počasí.
+</p>
+
+<p>
+V případě jakýchkoliv dotazů se obraťte na vedoucího týmu Jardu Šéfa, telefonní
+číslo je 000-123-321.
+</p>

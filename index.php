@@ -33,6 +33,7 @@ if ($auth)
         <title>Kopáči</title>
     </head>
     <body>
+		<div id="wrapper">
         <div id="header">
             <div id="inner_header">
                 <div id="title">
@@ -103,9 +104,14 @@ href='index.php?id=uprava&amp;user=$username'>$username</a>\n";
                     default: include('uvod.php');
                 }
             ?>
-        </div>
 
-        <div id="footer">
+        </div>
+			<div class="push" /></div>
+		</div>
+
+        <div id="footer" class="push">
+			<div id="footer_push"></div>
+			<p><b>2011 Tomáš Maršálek</h><p>
         </div>
     </body>
 </html>

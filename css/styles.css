@@ -1,4 +1,9 @@
+html {
+	height: 100%;
+}
+
 body {
+	height: 100%;
 	color: #111;
 	padding: 0;
 	margin: 0;
@@ -62,12 +67,32 @@ li {
 	margin: 0;
 }
 
+#content {
+	clear: both;
+	width: 55%;
+	margin: 0 auto 40px auto;
+	padding: 15px;
+}
+
+#wrapper {
+	margin-bottom: -100px;
+	min-height: 100%;
+}
+
 #footer {
 	clear: both;
+	text-align: center;
 	background-color: #EEE;
-	padding: 20px;
-	padding-bottom: 40 px;
 	margin: 0;
+	padding: 10px;
+}
+
+#footer_push {
+	height: 30%;
+}
+
+.push {
+	height: 100px;
 }
 
 #inner_header {
@@ -84,16 +109,6 @@ li {
 	text-decoration: none;
 }
 
-#content {
-	clear: both;
-	width: 55%;
-	margin-top: 40px;
-	margin-bottom: 40px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 15px;
-	clear: both;
-}
 
 #main_title {
 	display: block;
