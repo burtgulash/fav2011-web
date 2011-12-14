@@ -78,6 +78,8 @@ if (isset($_GET["username"]))
     $name_entered = $_GET["username"];
 ?>
 
+
+
 <h1 class="section_title">Přihlásit se</h1>
 
 <!-- Formulář k přihlášení uživatele -->

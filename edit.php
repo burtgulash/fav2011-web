@@ -105,6 +105,7 @@
     }
 ?>
 
+
 <form id="edit_form" class="form" action="edit.php?user=<?php echo $username ?>"
                    method="post" accept-charset="UTF-8">
     <input type="hidden" value="1" name="editted" />

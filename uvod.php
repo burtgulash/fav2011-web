@@ -26,6 +26,10 @@ if (isset($_POST["newpost"])) {
 if (!isset($fromIndex))
     relative_redirect("index.php");
 
+
+// --- OBSAH ---
+
+
 echo "<h1 class='section_title'>Novinky</h1>\n";
 
 // Hlavní uživatel může přispívat nové zprávy, poskytneme mu k tomu formulář.

@@ -1,5 +1,7 @@
 <?php
 
+// --- definice ---
+
 // uživatelská práva
 define ("NO_PERMISSIONS", 0);
 define ("MEMBER_PERMISSIONS", 1);
@@ -7,6 +9,10 @@ define ("HIGH_PERMISSIONS", 2);
 
 // soubor s databází
 define ("DATABASE", "data.db");
+
+
+
+// --- pomocné funkce ---
 
 // Přesměruje uživatele na stránku na serveru
 function relative_redirect($to)

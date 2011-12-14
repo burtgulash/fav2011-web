@@ -54,6 +54,10 @@ if (isset($_GET["removeuser"])) {
 if (!isset($fromIndex))
     relative_redirect("index.php?id=clenove");
 
+
+// --- OBSAH ---
+
+
 // Pokud nastala chyba při vkládání nového uživatele, která nemohla být ověřena
 // u klienta, vypíšeme chybu.
 if (isset($_GET["status"])) {
@@ -102,6 +106,7 @@ $query = "SELECT name, jmeno, prijmeni, telCislo, mesto FROM users
           ORDER BY permissions DESC, name ASC;";
 $result = $db->query($query);
 
+
 // Postupně vypsat všechny uživatele a jejich údaje.
 while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
     echo "
@@ -116,7 +121,7 @@ while ($user = $result->fetchArray(SQLITE3_ASSOC)) {
         echo "Město: " . $user["mesto"] . "<br />";
     echo "</p>";
 
-    // don't delete yourself
+    // Musíme se přesvědčit, že máme dostatečná práva a že nesmažeme sebe
     if ($perm >= HIGH_PERMISSIONS && $user["name"] != $username) {
         echo "
             <a class='removelink' href='index.php?id=uprava&user=" .

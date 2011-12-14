@@ -35,6 +35,11 @@ if (!isset($fromIndex))
     relative_redirect("index.php?id=vysledky");
 
 
+
+// --- OBSAH ---
+
+
+
 echo "<h1 class='section_title'>Odehrané zápasy</h1>\n";
 
 // Hlavní uživatel může vkládat nové odehrané zápasy, může k tomu použít 

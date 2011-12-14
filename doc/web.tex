@@ -1,7 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[czech]{babel}
-\usepackage{graphicx}
 
 \begin{document}
 \begin{titlepage}
@@ -15,12 +14,12 @@
 \end{titlepage}
 
 \section{Použité technologie}
-\subsection{html}
+\subsection{HTML}
 Použití html je jedním z povinných požadavků práce. Použitá verze je HTML4,
 některé prvky (pouze několik) jsou podporovány až verzí HTML5. Dynamicky
 vygenerované stránky jsou HTML5 validní.
 
-\subsection{css}
+\subsection{CSS}
 Vzhled webových stránek je celkem jednoduchý, ale přehledný. Nemá problém se
 zmenšováním okna nebo při zoomování přímo v prohlížeči. Veškeré pozicování,
 velikosti písma, barvy, atd. jsou zajištěny výlučně kaskádovými styly.
@@ -43,7 +42,7 @@ k dolnímu okraji obrazovky (sticky footer). Opět se naštěstí našlo pár n�
 jak tohoto docílit.
 
 
-\subsection{php}
+\subsection{PHP}
 Klíčovou technologií celé práce je právě php. Velké množství kódu je ve
 stránkách vygenerováno dynamicky, protože obsah je závislý na oprávnění
 uživatele k~přístupu k~tomuto obsahu. Například běžný nezaregistrovaný uživatel
@@ -77,7 +76,7 @@ její největší výhodou. Výhodou je také netřeba databázového serveru, p
 celá databáze je po celou dobu uložena v jediném souboru. Přenositelnost
 databáze je tedy zcela triviální.
 
-\subsection{ostatní}
+\subsection{Ostatní}
 Kontrola formulářů je velmi efektivní při použití javascriptu a ještě
 efektivnější v kombinaci s AJAXem. Rozhodl jsem se ale vyzkoušet nové
 formulářové prvky HTML5, které poskytují jednoduchou kontrolu a ještě
@@ -93,7 +92,7 @@ adresáři a kaskádové styly v adresáři $css$. Protože nebyl použit javasc
 ani jiné prvky zajišťující logiku na straně klienta, jiné adresáře nejsou ani
 potřeba. Databáze je uložena v souboru $data.db$ rovněž v kořenovém adresáři.
 
-\subsection{architektura}
+\subsection{Architektura}
 Rozvržení stránek bylo zvoleno tak, aby co nejvíce šetřilo zdrojovým kódem
 a bylo tedy co nejjednodušší při jakýchkoliv případných změnách. Uživatel je
 vždy přítomen na stránce $index.php$, obsah je pouze dynamicky vygenerován
@@ -108,14 +107,14 @@ vyhodnocování formuláře přesměruje uživatele na stejnou stránku, ale tak
 se pouze zobrazil obsah. Tento styl je poměrně hojně využívaný, protože
 umožňuje ponechat logiku i obsah jedné stránky v jednom souboru.
 
-\section{uživatelská příručka}
+\section{Uživatelská příručka}
 Stránky obsahují kategorie úvod, výsledky, kontakt a pro přihlášené uživatele
 sekci členové. Na úvodní stránku se dostaneme kliknutím na nadpis \uv{Kopáči}.
 K úpravě profilu se dostaneme kliknutím uživatelské jméno, v případě, že jsme
 přihlášeni. Bude nám poskytnut formulář ke změně údajů a hesla. Pokud nechceme
 měnit heslo, stačí ho nevyplňovat. Zbytek stránek je víceméně intuitivní.
 
-\section{závěr}
+\section{Závěr}
 Kódování stránek je UTF-8, čeština proto funguje bez nejmenších problémů.
 Práce byla úspěšně otestována v prohlížečích Mozilla Firefox 8.0 a Chromium
 15.0.  Při tvorbě webových stránek jsem se naučil používat jazyk php pro
